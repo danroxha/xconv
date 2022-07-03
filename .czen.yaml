@@ -1,0 +1,189 @@
+configuration:
+  name: cz_conventional_commits
+  tag_format: $version # v$major.$minor.$patch$prerelease"
+  version: 0.0.0
+  changelog_file: CHANGELOG.md
+  changelog_incremental: false
+  active_profile: cz_rabobank
+  update_changelog_on_bump: false
+  use_shortcuts: false
+  allow_abort: false
+  annotated_tag: true
+  version_files:
+    - java:pom.xml
+    - node:package.json
+
+  profiles: 
+  - name: cz_rabobank
+    bump_map:
+      'BREAKING CHANGE': MAJOR
+      feature: MINOR
+      bugfix: PATCH
+      hotfix: PATCH
+
+    bump_message: "version $current_version \u2192 $new_version"
+    bump_pattern: ^(BREAKING[\-\ ]CHANGE|feature|hotfix|docs|bugfix|refactor|perf)(\(.+\))?(!)?
+
+    changelog_pattern: ^(feature|bugfix|hotfix|perf|refactor)?(!)?
+
+    change_type_map:
+      feature: Feature
+      bugfix: Bugfix
+      hotfix: Hotfix
+      perf: Performance
+      docs: Documentation
+      refactor: Refactor
+
+    change_type_order:
+      - BREAKING[\-\ ]CHANGE
+      - feature
+      - bugfix
+      - hotfix
+      - refactor
+      - perf
+
+    commit_parser: ^(?P<change_type>docs|feature|bugfix|hotfix|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?:\s(?P<message>.*)
+    version_parser: (?P$version([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?(\w+)?)
+    
+    schema_pattern: (build|ci|docs|feature|bugfix|hotfix|perf|refactor|style|test|chore|revert|bump):(\(\S+\))?!?:(\s.*)
+
+    schema: "
+      <prefix>(<scope>): <subject>\n
+      <BLANK LINE>\n
+      <body>\n
+      <BLANK LINE>\n 
+      (BREAKING CHANGE: <footer> ) \n
+      <footer>
+    "
+    example: "
+      bugfix: correct minor typos in code\n\n
+      see the work item for details on the typos fixed\n\n
+      related work items #12
+    "
+    info: This is custom info from rabobank czen
+    info_path: czen_info.txt
+
+    message_template: "
+    {{prefix}}({{scope}}): {{subject}}\n\n
+    
+    {% if body == \"\" %}
+    
+    {{body}}\n\n
+    
+    {% endif %}
+    
+    
+    {% if is_breaking_change %}
+    
+    BREAKING CHANGE:{{footer}}\n\n
+    
+    {% else %}
+    
+    {% if footer == \"\" %}
+    
+    \nRelated work items: #{{footer}} 
+    
+    {% endif %}
+    {% endif %}
+    "
+    questions:
+      - type: list
+        message: "Select the type of change you are committing"
+        name: prefix
+        choices:
+          - value: feature
+            key: f
+            name: "feature: A new feature."
+
+          - value: bugfix
+            name: "bugfix: A bug fix. Correlates with PATCH in SemVer"
+            key: b
+
+          - value: hotfix
+            name: "hotfix: A bug fix in PROD"
+            key: h
+
+          - value: docs
+            name: "docs: Documentation only changes"
+            key: d
+
+          - value: style
+            name: "style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)"
+            key: s
+
+          - value: refactor
+            name: "refactor: A code change that neither fixes a bug nor adds a feature"
+            key: r
+
+          - value: perf
+            name: "perf: A code change that improves performance"
+            key: p
+
+          - value: test
+            name: "test: Adding missing or correcting existing tests"
+            key: t
+
+          - value: build
+            name: "build: Changes that affect the build system or external dependencies (example scopes: pip, docker, npm)"
+            key: x
+
+          - value: ci
+            name: "ci: Changes to our CI configuration files and scripts (example scopes: AzureDevOps"
+            key: c
+
+      - type: input
+        message: "What is the scope of this change? (class or file name): (press [enter] to skip): "
+        name: scope
+        # default: "Default value for name field"
+        filter: is_empty
+
+      - type: input
+        message: "Write a short and imperative summary of the code changes: (lower case and no period): "
+        name: subject
+        # default: "Default value for name field"
+        filter: is_empty
+
+      - type: input
+        message: "Provide additional contextual information about the code changes: (press [enter] to skip): "
+        name: body
+        # default: "Default value for name field"
+        # filter: "multiple_line_breaker"
+
+      - type: confirm
+        name: is_breaking_change
+        message: "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer (press [enter] to skip): "
+        default: false
+
+      # - type: input
+      #   message: "Related work items (PBI or Task IDs): (press [enter] to skip)"
+      #   name: footer
+      #   default: "Default value for name field"
+script:
+  filter:
+    - name: is_empty
+      retry: true
+      enable: true
+      # type: file # file or inline default 'inline'
+      script: >
+        function run(argument) then
+          return argument == nil or argument == ''
+        end
+
+  automation:
+    - name: toogle_version
+      bind: bump # call commit, bumg, changelog [...]
+      when: after # after, before exceute command
+      # type: file # file or inline default 'inline'
+      script: >
+        function change_java_maven_version() then 
+          -- script here
+        end
+
+        function change_dockerfile_jar_version() then
+          -- script here
+        end
+
+        function run(argument) then
+          change_java_maven_version()
+          change_dockerfile_jar_version()
+        end
