@@ -1,6 +1,9 @@
 package cmd
 
-import "os/exec"
+import (
+	"fmt"
+	"os/exec"
+)
 
 func (command InternalCommand)Execute() ([]byte, error) {
 

@@ -1,19 +1,16 @@
 configuration:
-  tag_format: $version # v$major.$minor.$patch$prerelease"
   version: 0.0.0
   changelog_file: CHANGELOG.md
-  changelog_incremental: false
   active_profile: czen_rabobank
   update_changelog_on_bump: false
-  use_shortcuts: false
-  allow_abort: false
   annotated_tag: true
-  version_files:
-    - java:pom.xml
-    - node:package.json
 
   profiles: 
   - name: czen_rabobank
+    tag:
+      format: v$version-SNAPSHOT # v$major.$minor.$patch$prerelease"
+      annotated: true
+      
     bump_map:
       'BREAKING CHANGE': MAJOR
       feature: MINOR
@@ -184,20 +181,63 @@ script:
         end
 
   automation:
-    - name: toogle_version
-      bind: bump # call commit, bumg, changelog [...]
-      when: after # after, before exceute command
-      # type: file # file or inline default 'inline'
-      script: >
-        function change_java_maven_version() 
-          -- script here
-        end
+  - name: print_git_status
+    enable: false
+    language: sh # sh | lua
+    bind: commit
+    when: after
+    script: |
+      gs=$(git status)
+      # touch git_status.txt
+      # echo "$gs" > git_status.txt
+      echo "$gs"
 
-        function change_dockerfile_jar_version()
-          -- script here
-        end
+  - name: toogle_version
+    enable: true
+    language: sh # sh | lua
+    bind: bump
+    when: after # before
+    script: |
+      # running in current folder
 
-        function run(argument)
-          change_java_maven_version()
-          change_dockerfile_jar_version()
-        end
+      update_microservice_version() {
+
+        NEW_VERSION=$(git tag --list | sort -h | tail -n 1)
+
+        if [ -e pom.xml ]
+        then
+
+          MS_OLD_VERSION=$(cat pom.xml | grep '<ms.version>' | sed 's/<[^>]*>//g' | sed 's,^ *,,; s, *$,,')
+          sed -i "s/$MS_OLD_VERSION/$NEW_VERSION/" pom.xml
+          echo "Versão atual - pom.xml:  $MS_OLD_VERSION -> $NEW_VERSION"
+
+          if [ -e Dockerfile ]
+          then
+            MS_NAME=$(cat pom.xml | grep '<ms.name>' | sed 's/<[^>]*>//g' | sed 's,^ *,,; s, *$,,')
+            sed -i "s/$MS_NAME-$MS_OLD_VERSION/$MS_NAME-$NEW_VERSION/" Dockerfile
+            echo "Versão atual - Dockerfile: $MS_NAME-$NEW_VERSION.jar"
+          fi
+
+          git add .
+          git commit --amend --no-edit
+        fi
+      }
+
+      update_frontend_version() {
+
+        NEW_VERSION=$(git tag --list | sort -h | tail -n 1)
+
+        if [ -e package.json ] ; then
+            npm version "$NEW_VERSION"
+            git rebase --autosquash HEAD~1 HEAD~2 ; \
+            echo "Versão atual - package.json: $NEW_VERSION"
+        fi
+      }
+
+      update_microservice_version
+      update_frontend_version
+
+      if [ ! -e package.json ] && [ ! -e Dockerfile ]
+      then
+        echo "Projeto Maven/Node não encontrado."
+      fi
