@@ -7,10 +7,9 @@ import (
 	"strings"
 )
 
-
-func ReadInput(message string) string {
+func ReadInput(message string, args ...any) string {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Printf(message)
+	fmt.Printf(message, args...)
 
 	input, _ := reader.ReadString('\n')
 
