@@ -15,6 +15,10 @@ func Rollback(c *cli.Context) error {
 
 	var items []string = []string{}
 
+	if err != nil {
+		panic(err)
+	}
+
 	for _, tag := range tags {
 		items = append(items, tag.Annotation)
 	}
