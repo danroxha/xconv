@@ -27,7 +27,7 @@ AUTHOR:
    Rocha da Silva, Daniel <rochadaniel@acad.ifma.edu.br>
 
 COMMANDS:
-   init, i        init commitizen configuration
+   init, i        init czen configuration
    commit, c      create new commit
    changelog, ch  generate changelog (note that it will overwrite existing file)
    bump, b        bump semantic version based on the git log

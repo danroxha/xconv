@@ -36,7 +36,7 @@ func Run() {
 				Name:    "init",
 				Aliases: []string{"i"},
 				Action:  cli.Init,
-				Usage:   "init commitizen configuration",
+				Usage:   "init czen configuration",
 			},
 			{
 				Name:    "commit",
@@ -83,7 +83,7 @@ func Run() {
 			{
 				Name:    "version",
 				Aliases: []string{"v"},
-				Action:  cli.Schema,
+				Action:  cli.Version,
 				Usage:   "get the version of the installed czen or the current project",
 			},
 		},
