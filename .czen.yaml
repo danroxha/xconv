@@ -138,18 +138,21 @@ configuration:
       - type: input
         message: "What is the scope of this change? (class or file name): (press [enter] to skip): "
         name: scope
+        handler: to_lower_case
         # default: "Default value for name field"
         filter: is_empty
 
       - type: input
         message: "Write a short and imperative summary of the code changes: (lower case and no period): "
         name: subject
+        handler: to_lower_case
         # default: "Default value for name field"
         filter: is_empty
 
       - type: input
         message: "Provide additional contextual information about the code changes: (press [enter] to skip): "
         name: body
+        handler: to_lower_case
         # default: "Default value for name field"
         # filter: "multiple_line_breaker"
 
@@ -161,6 +164,7 @@ configuration:
       - type: input
         message: "Related work items (PBI, Task IDs, Issue): (press [enter] to skip)"
         name: footer
+        handler: to_lower_case
         default: "Default value for name field"
 script:
   filter:
@@ -171,6 +175,14 @@ script:
       script: >
         function run(argument)
           return argument == nil or argument == ''
+        end
+
+  handler:
+    - name: to_lower_case
+      enable: true
+      script: >
+        function run(argument)
+          return string.lower(myString)
         end
 
   automation:
