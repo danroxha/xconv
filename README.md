@@ -15,29 +15,6 @@ or the shortcut
 ```bash
 czen h
 ```
-### Committing
-
-```bash
-czen commit
-```
-
-or the shortcut
-
-```bash
-czen c
-```
-
-### Rollback to Tag
-
-```bash
-czen rollback
-```
-
-or the shortcut
-
-```bash
-czen r
-```
 - output
 ```
 NAME:
@@ -68,6 +45,30 @@ GLOBAL OPTIONS:
 COPYRIGHT:
    (c) 2022 MIT
 ```
+### Committing
+
+```bash
+czen commit
+```
+
+or the shortcut
+
+```bash
+czen c
+```
+
+### Rollback to Tag
+
+```bash
+czen rollback
+```
+
+or the shortcut
+
+```bash
+czen r
+```
+
 ### Show tags
 
 ```bash
