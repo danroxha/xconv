@@ -98,7 +98,6 @@ func Commit(c *cli.Context) error {
 
 			if err != nil {
 				action = fmt.Sprint(false)
-				continue
 			}
 
 			clientInput = action
