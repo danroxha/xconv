@@ -169,7 +169,7 @@ script:
       enable: true
       # type: file # file or inline default 'inline'
       script: >
-        function run(argument) then
+        function run(argument)
           return argument == nil or argument == ''
         end
 
@@ -179,15 +179,15 @@ script:
       when: after # after, before exceute command
       # type: file # file or inline default 'inline'
       script: >
-        function change_java_maven_version() then 
+        function change_java_maven_version() 
           -- script here
         end
 
-        function change_dockerfile_jar_version() then
+        function change_dockerfile_jar_version()
           -- script here
         end
 
-        function run(argument) then
+        function run(argument)
           change_java_maven_version()
           change_dockerfile_jar_version()
         end
