@@ -123,12 +123,16 @@ configuration:
             name: "test: Adding missing or correcting existing tests"
             key: t
 
+          - value: chore
+            name: "chore: Changes to configuration files  (example scopes: .gitignore, .czen.yaml)"
+            key: z
+
           - value: build
             name: "build: Changes that affect the build system or external dependencies (example scopes: pip, docker, npm)"
             key: x
 
           - value: ci
-            name: "ci: Changes to our CI configuration files and scripts (example scopes: AzureDevOps"
+            name: "ci: Changes to our CI configuration files and scripts (example scopes: AzureDevOps)"
             key: c
 
       - type: input
@@ -154,10 +158,10 @@ configuration:
         message: "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer (press [enter] to skip): "
         default: false
 
-      # - type: input
-      #   message: "Related work items (PBI or Task IDs): (press [enter] to skip)"
-      #   name: footer
-      #   default: "Default value for name field"
+      - type: input
+        message: "Related work items (PBI, Task IDs, Issue): (press [enter] to skip)"
+        name: footer
+        default: "Default value for name field"
 script:
   filter:
     - name: is_empty
