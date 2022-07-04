@@ -57,6 +57,26 @@ func (script *Script) LoadScript() error {
 	return nil
 }
 
+func (sc *Script) FindAllFilters() map[string]Filter {
+	filterGroup := make(map[string]Filter)
+
+	for _, filter := range sc.Filter {
+		filterGroup[filter.Name] = filter
+	}
+
+	return filterGroup
+}
+
+func (sc *Script) FindAllMiddlewares() map[string]Middleware {
+	middlewareGroup := make(map[string]Middleware)
+
+	for _, middleware := range sc.Middleware {
+		middlewareGroup[middleware.Name] = middleware
+	}
+
+	return middlewareGroup
+}
+
 func (conf *Configuration) FindCurrentProfileEnable() (Profile, error) {
 
 	for _, profile := range conf.Profiles {

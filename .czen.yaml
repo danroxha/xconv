@@ -1,10 +1,9 @@
 configuration:
-  name: cz_conventional_commits
   tag_format: $version # v$major.$minor.$patch$prerelease"
   version: 0.0.0
   changelog_file: CHANGELOG.md
   changelog_incremental: false
-  active_profile: cz_rabobank
+  active_profile: czen_rabobank
   update_changelog_on_bump: false
   use_shortcuts: false
   allow_abort: false
@@ -14,7 +13,7 @@ configuration:
     - node:package.json
 
   profiles: 
-  - name: cz_rabobank
+  - name: czen_rabobank
     bump_map:
       'BREAKING CHANGE': MAJOR
       feature: MINOR
@@ -88,7 +87,7 @@ configuration:
     "
     questions:
       - type: list
-        message: "Select the type of change you are committing"
+        message: "Select the type of change you are committing:"
         name: prefix
         choices:
           - value: feature
@@ -138,23 +137,31 @@ configuration:
       - type: input
         message: "What is the scope of this change? (class or file name): (press [enter] to skip): "
         name: scope
-        handler: to_lower_case
-        # default: "Default value for name field"
+        middleware: 
+        - to_lower_case
+        - trim
         filter: is_empty
+        # editor: true # Open editor. Given undefined GIT_EDITOR and EDITOR try open [code, nano, vim, vi]
+        # default: "Default value for name field"
 
       - type: input
         message: "Write a short and imperative summary of the code changes: (lower case and no period): "
         name: subject
-        handler: to_lower_case
-        # default: "Default value for name field"
+        middleware: 
+        - to_lower_case
+        - trim
         filter: is_empty
+        # editor: true # Open editor. Given undefined GIT_EDITOR and EDITOR try open [code, nano, vim, vi]
+        # default: "Default value for name field"
 
       - type: input
         message: "Provide additional contextual information about the code changes: (press [enter] to skip): "
         name: body
-        handler: to_lower_case
+        middleware:
+        - to_lower_case
+        # editor: true # Open editor. Given undefined GIT_EDITOR and EDITOR try open [code, nano, vim, vi]
+        # filter: is_empty
         # default: "Default value for name field"
-        # filter: "multiple_line_breaker"
 
       - type: confirm
         name: is_breaking_change
@@ -164,25 +171,38 @@ configuration:
       - type: input
         message: "Related work items (PBI, Task IDs, Issue): (press [enter] to skip)"
         name: footer
-        handler: to_lower_case
-        default: "Default value for name field"
+        middleware:
+        - to_lower_case
+        # editor: true # Open editor. Given undefined GIT_EDITOR and EDITOR try open [code, nano, vim, vi]
+        # default: "Default value for name field"
+
 script:
   filter:
     - name: is_empty
       retry: true
       enable: true
+      message:
+        content: "[ALERT]: this field cannot be empty or only contain spaces"
+        color: true
       # type: file # file or inline default 'inline'
       script: >
         function run(argument)
           return argument == nil or argument == ''
         end
 
-  handler:
+  middleware:
     - name: to_lower_case
       enable: true
       script: >
         function run(argument)
-          return string.lower(myString)
+          return string.lower(argument)
+        end
+
+    - name: trim
+      enable: true
+      script: >
+        function run(argument)
+          return (string.gsub(argument, "^%s*(.-)%s*$", "%1"))
         end
 
   automation:

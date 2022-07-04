@@ -7,12 +7,14 @@ type Option struct {
 }
 
 type Question struct {
-	Type    string   `yaml:"type"`
-	Message string   `yaml:"message"`
-	Name    string   `yaml:"name"`
-	Default string   `yaml:"default"`
-	Filter  string   `yaml:"filter"`
-	Choices []Option `yaml:"choices"`
+	Type       string   `yaml:"type"`
+	Message    string   `yaml:"message"`
+	Name       string   `yaml:"name"`
+	Default    string   `yaml:"default"`
+	Middleware []string   `yaml:"middleware"`
+	Filter     string   `yaml:"filter"`
+	Editor     bool     `yaml:"editor"`
+	Choices    []Option `yaml:"choices"`
 }
 
 type ExitCode struct {
@@ -44,12 +46,18 @@ type Profile struct {
 	Schema          string            `yaml:"schema"`
 }
 
+type Message struct {
+	Content string `yaml:"content"`
+	Color   bool   `yaml:"color"`
+}
+
 type Filter struct {
-	Name   string `yaml:"name"`
-	Retry  bool   `yaml:"retry"`
-	Enable bool   `yaml:"enable"`
-	Script string `yaml:"script"`
-	Type   string `yaml:"type"`
+	Name    string  `yaml:"name"`
+	Retry   bool    `yaml:"retry"`
+	Message Message `yaml:"message"`
+	Enable  bool    `yaml:"enable"`
+	Script  string  `yaml:"script"`
+	Type    string  `yaml:"type"`
 }
 
 type Automation struct {
@@ -61,8 +69,16 @@ type Automation struct {
 	Type   string `yaml:"type"`
 }
 
+type Middleware struct {
+	Name   string `yaml:"name"`
+	Enable bool   `yaml:"enable"`
+	Script string `yaml:"script"`
+	Type   string `yaml:"type"`
+}
+
 type Script struct {
 	Filter     []Filter     `yaml:"filter"`
+	Middleware []Middleware `yaml:"middleware"`
 	Automation []Automation `yaml:"automation"`
 }
 
@@ -113,12 +129,18 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"InvalidConfigurationError": {
 		Exception:   "InvalidConfigurationError",
 		ExitCode:    19,
-		Description: "An error was found in the Commitizen Configuration, such as duplicates in change_type_order",
+		Description: "An error was found in the czen configuration",
 	},
 
 	"NoneIncrementExit": {
 		Exception: "InvalidConfigurationError",
 		ExitCode:  21,
 		Description: "	The commits found are not elegible to be bumped",
+	},
+
+	"InvalidScriptFilter": {
+		Exception:   "InvalidScriptFilter",
+		ExitCode:    22,
+		Description: "An error was found in the filter",
 	},
 }

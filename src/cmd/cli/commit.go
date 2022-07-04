@@ -7,6 +7,7 @@ import (
 	"github.com/dannrocha/czen/src/cmd"
 	"github.com/dannrocha/czen/src/config"
 	"github.com/dannrocha/czen/src/git"
+	"github.com/dannrocha/czen/src/script"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 )
@@ -14,8 +15,15 @@ import (
 func Commit(c *cli.Context) error {
 
 	messages := make(map[string]string)
+
 	conf := config.Configuration{}
+	scrip := config.Script{}
+
 	conf.LoadConfigurationFile()
+	scrip.LoadScript()
+
+	filterGroup := scrip.FindAllFilters()
+	middlewareGroup := scrip.FindAllMiddlewares()
 
 	profile, profileErr := conf.FindCurrentProfileEnable()
 
@@ -33,9 +41,20 @@ func Commit(c *cli.Context) error {
 	}
 
 	options := questionGroup.Choices
+	sampleInputGroup := []config.Question{}
+	listInputGroup := config.Question{}
+
+	for _, question := range profile.Questions {
+		if question.Type == "list" {
+			listInputGroup = question
+			continue
+		}
+
+		sampleInputGroup = append(sampleInputGroup, question)
+	}
 
 	prompt := promptui.Select{
-		Label: "Select the type of change you are committing",
+		Label: listInputGroup.Message,
 		Items: optionDescription(options),
 	}
 
@@ -47,16 +66,6 @@ func Commit(c *cli.Context) error {
 	}
 
 	messages[questionGroup.Name] = options[index].Value
-
-	sampleInputGroup := []config.Question{}
-
-	for _, question := range profile.Questions {
-		if question.Type == "list" {
-			continue
-		}
-
-		sampleInputGroup = append(sampleInputGroup, question)
-	}
 
 	parse := map[string]func(string) string{
 
@@ -103,7 +112,61 @@ func Commit(c *cli.Context) error {
 			clientInput = action
 
 		} else {
-			clientInput = parse[input.Type](cmd.ReadInput(input.Message))
+			for {
+
+				clientInput = parse[input.Type](cmd.ReadInput(input.Message))
+
+				filter, isContaisFilter := filterGroup[input.Filter]
+
+				for _, middlewareName := range input.Middleware {
+
+					middleware, isContaisMiddleware := middlewareGroup[middlewareName]
+
+					if isContaisMiddleware {
+						if middleware.Enable {
+							runner := script.ScriptHandle{
+								Script: middleware.Script,
+								Args:   []string{clientInput},
+							}
+
+							clientInput = runner.Run()
+						}
+					}
+				}
+
+				if isContaisFilter {
+
+					if filter.Enable {
+						runner := script.ScriptHandle{
+							Script: filter.Script,
+							Args:   []string{clientInput},
+						}
+
+						filterValidate := runner.RunFilter()
+
+						if !filterValidate {
+							break
+						} else {
+
+							message := filter.Message
+
+							if message.Content != "" {
+								if message.Color {
+									fmt.Printf("\033[33m%v\033[0m\n", filter.Message.Content)
+								} else {
+									fmt.Printf("%v\n", filter.Message.Content)
+								}
+							}
+						}
+					}
+
+					if !filter.Retry || !filter.Enable {
+						break
+					}
+				} else {
+					break
+				}
+			}
 		}
 
 		if input.Default != "" && strings.TrimSpace(clientInput) == "" {

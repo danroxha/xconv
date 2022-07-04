@@ -13,5 +13,5 @@ func ReadInput(message string, args ...any) string {
 
 	input, _ := reader.ReadString('\n')
 
-	return strings.Replace(input, "\n", "", -1)
+	return strings.TrimSpace(strings.Replace(input, "\n", "", -1))
 }
