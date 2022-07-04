@@ -62,29 +62,7 @@ configuration:
     info: This is custom info from rabobank czen
     info_path: czen_info.txt
 
-    message_template: "
-    {{prefix}}({{scope}}): {{subject}}\n\n
-    
-    {% if body == \"\" %}
-    
-    {{body}}\n\n
-    
-    {% endif %}
-    
-    
-    {% if is_breaking_change %}
-    
-    BREAKING CHANGE:{{footer}}\n\n
-    
-    {% else %}
-    
-    {% if footer == \"\" %}
-    
-    \nRelated work items: #{{footer}} 
-    
-    {% endif %}
-    {% endif %}
-    "
+    message_template: "{{prefix}}({{scope}}): {{subject}}\n\n{% if body != '' %}{{body}}\n\n{% endif %}{% if is_breaking_change %}BREAKING CHANGE: {% endif %}{% if footer != '' %}Related work items: #{{footer}}{% endif %}"
     questions:
       - type: list
         message: "Select the type of change you are committing:"
