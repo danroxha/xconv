@@ -4,14 +4,31 @@ import (
 	"fmt"
 
 	"github.com/dannrocha/czen/src/cmd"
-	"github.com/dannrocha/czen/src/git"
+	"github.com/dannrocha/czen/src/gitscm"
+	"github.com/dannrocha/czen/src/setup"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 )
 
 func Rollback(c *cli.Context) error {
 
-	tags, err := git.LoadGitTags()
+	scrip := setup.Script{}
+	scrip.LoadScript()
+
+	for _, auto := range scrip.Automation {
+
+		if auto.Bind == ROLLBACK && auto.Enable {
+			if auto.When == setup.BEFORE {
+				auto.Run()
+			} else {
+				defer auto.Run()
+			}
+		}
+	}
+
+
+	git := gitscm.Git{}
+	err := git.LoadGitTags()
 
 	var items []string = []string{}
 
@@ -19,7 +36,7 @@ func Rollback(c *cli.Context) error {
 		panic(err)
 	}
 
-	for _, tag := range tags {
+	for _, tag := range git.GitTags {
 		items = append(items, tag.Annotation)
 	}
 
@@ -34,7 +51,7 @@ func Rollback(c *cli.Context) error {
 		panic(err)
 	}
 
-	toTag := tags[index]
+	toTag := git.GitTags[index]
 
 	fmt.Printf(`Selected:
     Version: %v

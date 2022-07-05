@@ -5,18 +5,34 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/dannrocha/czen/src/git"
+	"github.com/dannrocha/czen/src/gitscm"
+	"github.com/dannrocha/czen/src/setup"
 	"github.com/urfave/cli/v2"
 )
 
 func Tag(c *cli.Context) error {
-	tags, err := git.LoadGitTags()
+
+	scrip := setup.Script{}
+	scrip.LoadScript()
+
+	for _, auto := range scrip.Automation {
+		if auto.Bind == TAG && auto.Enable {
+			if auto.When == setup.BEFORE {
+				auto.Run()
+			} else {
+				defer auto.Run()
+			}
+		}
+	}
+
+	git := gitscm.Git{}
+	err := git.LoadGitTags()
 
 	if err != nil {
 		panic(err.Error())
 	}
 
-	if len(tags) == 0 {
+	if git.IsTagsEmpty() {
 		fmt.Println("There are no tag in this repository")
 		return nil
 	}
@@ -26,8 +42,8 @@ func Tag(c *cli.Context) error {
 
 	fmt.Fprintf(writer, " * Data\t * Version\t * Author\n")
 
-	for _, tag := range tags {
-		fmt.Fprintf(writer, "%v\t %v\t %v\n", "Sat Jul 2 20:06:22 2022", tag.Annotation, tag.Author)
+	for _, tag := range git.GitTags {
+		fmt.Fprintf(writer, "%v\t %v\t %v\n", tag.Date, tag.Annotation, tag.Author)
 	}
 
 	return nil

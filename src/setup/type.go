@@ -1,4 +1,13 @@
-package config
+package setup
+const (
+	LUA = "lua"
+	SH = "sh"
+	BEFORE = "before"
+	AFTER = "after"
+	LIST = "list"
+	CONFIRM = "confirm"
+	INPUT = "input"
+)
 
 type Option struct {
 	Key   string `yaml:"key"`
@@ -11,7 +20,7 @@ type Question struct {
 	Message    string   `yaml:"message"`
 	Name       string   `yaml:"name"`
 	Default    string   `yaml:"default"`
-	Middleware []string   `yaml:"middleware"`
+	Middleware []string `yaml:"middleware"`
 	Filter     string   `yaml:"filter"`
 	Editor     bool     `yaml:"editor"`
 	Choices    []Option `yaml:"choices"`
@@ -61,12 +70,13 @@ type Filter struct {
 }
 
 type Automation struct {
-	Name   string `yaml:"name"`
-	Bind   string `yaml:"bind"`
-	Enable bool   `yaml:"enable"`
-	When   string `yaml:"when"`
-	Script string `yaml:"script"`
-	Type   string `yaml:"type"`
+	Name     string `yaml:"name"`
+	Bind     string `yaml:"bind"`
+	Language string `yaml:"language"`
+	Enable   bool   `yaml:"enable"`
+	When     string `yaml:"when"`
+	Script   string `yaml:"script"`
+	Type     string `yaml:"type"`
 }
 
 type Middleware struct {
@@ -81,6 +91,8 @@ type Script struct {
 	Middleware []Middleware `yaml:"middleware"`
 	Automation []Automation `yaml:"automation"`
 }
+
+
 
 // https://github.com/commitizen-tools/commitizen/blob/master/docs/exit_codes.md
 var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
@@ -141,6 +153,6 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"InvalidScriptFilter": {
 		Exception:   "InvalidScriptFilter",
 		ExitCode:    22,
-		Description: "An error was found in the filter",
+		Description: "An error was found in the script",
 	},
 }

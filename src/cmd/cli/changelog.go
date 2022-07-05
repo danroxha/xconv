@@ -1,14 +1,22 @@
 package cli
 
-
 import (
-	"fmt"
-
+	"github.com/dannrocha/czen/src/setup"
 	"github.com/urfave/cli/v2"
 )
 
-
 func Changelog(c *cli.Context) error {
-	fmt.Println("changelog not implemented")
+	scrip := setup.Script{}
+	scrip.LoadScript()
+
+	for _, auto := range scrip.Automation {
+		if auto.Bind == CHANGELOG && auto.Enable {
+			if auto.When == setup.BEFORE {
+				auto.Run()
+			} else {
+				defer auto.Run()
+			}
+		}
+	}
 	return nil
 }
