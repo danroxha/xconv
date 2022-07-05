@@ -160,7 +160,7 @@ script:
         content: "[ALERT]: this field cannot be empty or only contain spaces"
         color: true
       # type: file # file or inline default 'inline'
-      script: >
+      script: |
         function run(argument)
           return argument == nil or argument == ''
         end
@@ -168,29 +168,27 @@ script:
   middleware:
     - name: to_lower_case
       enable: true
-      script: >
+      script: |
         function run(argument)
           return string.lower(argument)
         end
 
     - name: trim
       enable: true
-      script: >
+      script: |
         function run(argument)
           return (string.gsub(argument, "^%s*(.-)%s*$", "%1"))
         end
 
   automation:
-  - name: print_git_status
+  - name: push_tag
     enable: false
     language: sh # sh | lua
-    bind: commit
+    bind: bump
     when: after
     script: |
-      gs=$(git status)
-      # touch git_status.txt
-      # echo "$gs" > git_status.txt
-      echo "$gs"
+      LATEST_TAG=$(git tag --list | sort -h | tail -n 1)
+      git push origin $LATEST_TAG
 
   - name: toogle_version
     enable: true
