@@ -1,31 +1,29 @@
-package cli
+package commit
 
 import (
 	"fmt"
 	"strings"
 
-	"github.com/dannrocha/czen/src/cmd"
+	"github.com/dannrocha/czen/src/cli"
 	"github.com/dannrocha/czen/src/gitscm"
 	"github.com/dannrocha/czen/src/setup"
 	"github.com/manifoldco/promptui"
-	"github.com/urfave/cli/v2"
 )
 
-func Commit(c *cli.Context) error {
-
+func Execute(args ...string) error {
 	messages := make(map[string]string)
 
-	conf := setup.Configuration{}
+	role := setup.Role{}
 	scrip := setup.Script{}
 
-	conf.LoadConfigurationFile()
+	role.LoadRole()
 	scrip.LoadScript()
 
-	profile, profileErr := conf.FindCurrentProfileEnable()
+	profile, profileErr := role.FindCurrentProfileEnable()
 
 	for _, auto := range scrip.Automation {
 
-		if auto.Bind == COMMIT && auto.Enable {
+		if auto.Bind == cmd.COMMIT && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
 			} else {
@@ -52,7 +50,7 @@ func Commit(c *cli.Context) error {
 	listInputGroup := setup.Question{}
 
 	for _, question := range profile.Questions {
-		if question.Type ==  setup.LIST {
+		if question.Type == setup.LIST {
 			listInputGroup = question
 			continue
 		}

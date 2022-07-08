@@ -1,18 +1,19 @@
-package cli
+package initialize
 
 import (
+	"fmt"
+
+	"github.com/dannrocha/czen/src/cli"
 	"github.com/dannrocha/czen/src/setup"
-	"github.com/urfave/cli/v2"
 )
 
 
-func Bump(c *cli.Context) error {
-	
+func Execute() error {
 	scrip := setup.Script{}
 	scrip.LoadScript()
 
 	for _, auto := range scrip.Automation {
-		if auto.Bind == BUMP && auto.Enable {
+		if auto.Bind == cmd.INIT && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
 			} else {
@@ -20,6 +21,7 @@ func Bump(c *cli.Context) error {
 			}
 		}
 	}
-	
+
+	fmt.Println("init not implemented")
 	return nil
 }

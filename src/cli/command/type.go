@@ -1,4 +1,4 @@
-package cli
+package command
 
 const (
 	COMMIT    = "commit"

@@ -1,23 +1,22 @@
-package cli
+package rollback
 
 import (
 	"fmt"
 
-	"github.com/dannrocha/czen/src/cmd"
+	"github.com/dannrocha/czen/src/cli"
 	"github.com/dannrocha/czen/src/gitscm"
 	"github.com/dannrocha/czen/src/setup"
 	"github.com/manifoldco/promptui"
-	"github.com/urfave/cli/v2"
 )
 
-func Rollback(c *cli.Context) error {
+func Execute(args ...string) error {
 
 	scrip := setup.Script{}
 	scrip.LoadScript()
 
 	for _, auto := range scrip.Automation {
 
-		if auto.Bind == ROLLBACK && auto.Enable {
+		if auto.Bind == cmd.ROLLBACK && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
 			} else {
@@ -26,9 +25,7 @@ func Rollback(c *cli.Context) error {
 		}
 	}
 
-
-	git := gitscm.Git{}
-	err := git.LoadGitTags()
+	git, err := gitscm.New()
 
 	var items []string = []string{}
 
@@ -79,23 +76,14 @@ func Rollback(c *cli.Context) error {
 		return nil
 	}
 
-	command := cmd.InternalCommand{
-		Application: "git",
-		Args: []string{
-			"reset",
-			"--hard",
-			toTag.Commit.Hash,
-		},
-	}
-
-	_, err = command.Execute()
+	err = gitscm.BackToCommit(toTag.Commit.Hash)
 
 	if err != nil {
-		fmt.Printf("Can't rollback to %v with hash [ %v ]\n", toTag.Annotation, toTag.Commit.Hash)
+		fmt.Printf("can't rollback to %v with hash [ %v ]\n", toTag.Annotation, toTag.Commit.Hash)
 		return err
 	}
 
-	fmt.Printf("Current version %v", toTag.Annotation)
+	fmt.Printf("current version %v", toTag.Annotation)
 
 	return nil
 }

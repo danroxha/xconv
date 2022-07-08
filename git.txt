@@ -1,0 +1,15 @@
+https://devhints.io/git-log-format
+https://careerkarma.com/blog/git-log/#:~:text=The%20git%20log%20command%20shows,the%20history%20of%20a%20repository.
+
+
+get_tag_message = git tag -l --format='%(contents)' 1.1.0-SNAPSHOT
+get_commit_mess = git log -100 --format=%s
+git log --pretty="format:%H"q
+
+
+OLDER_COMMIT=aa60a1fb82faa96e2be00a8d4ed977b1a9efc3bf
+LATEST_COMMIT=e61db4e43e67818f9fff368dbcf12235ff910962
+
+# Ober commits entre
+git log --oneline $OLDER_COMMIT..$LATEST_COMMIT
+git log --oneline $OLDER_COMMIT..HEAD

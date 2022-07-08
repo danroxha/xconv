@@ -1,4 +1,4 @@
-package cli
+package tag
 
 import (
 	"fmt"
@@ -7,16 +7,16 @@ import (
 
 	"github.com/dannrocha/czen/src/gitscm"
 	"github.com/dannrocha/czen/src/setup"
-	"github.com/urfave/cli/v2"
+	"github.com/dannrocha/czen/src/cli"
 )
 
-func Tag(c *cli.Context) error {
+func Execute(args ...string) error {
 
 	scrip := setup.Script{}
 	scrip.LoadScript()
 
 	for _, auto := range scrip.Automation {
-		if auto.Bind == TAG && auto.Enable {
+		if auto.Bind == cmd.TAG && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
 			} else {
@@ -25,15 +25,14 @@ func Tag(c *cli.Context) error {
 		}
 	}
 
-	git := gitscm.Git{}
-	err := git.LoadGitTags()
+	git, err := gitscm.New()
 
 	if err != nil {
 		panic(err.Error())
 	}
 
 	if git.IsTagsEmpty() {
-		fmt.Println("There are no tag in this repository")
+		fmt.Println("there are no tag in this repository")
 		return nil
 	}
 

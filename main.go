@@ -1,9 +1,10 @@
 package main
 
-import (
-	application "github.com/dannrocha/czen/src"
-)
+import "github.com/dannrocha/czen/src/cli/command/schema"
+
+// application "github.com/dannrocha/czen/src"
 
 func main() {
-	application.Run()
+	schema.Execute()
+	// application.Run()
 }

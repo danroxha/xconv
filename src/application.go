@@ -5,7 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/dannrocha/czen/src/cmd/cli"
+	"github.com/dannrocha/czen/src/cli/command"
+	"github.com/dannrocha/czen/src/cli/frontend"
 	CLI "github.com/urfave/cli/v2"
 )
 
@@ -33,57 +34,57 @@ func Run() {
 		HideHelp:  false,
 		Commands: []*CLI.Command{
 			{
-				Name:    cli.INIT,
+				Name:    command.INIT,
 				Aliases: []string{"i"},
-				Action:  cli.Init,
+				Action:  frontend.Init,
 				Usage:   "init czen configuration",
 			},
 			{
-				Name:    cli.COMMIT,
+				Name:    command.COMMIT,
 				Aliases: []string{"c"},
-				Action:  cli.Commit,
+				Action:  frontend.Commit,
 				Usage:   "create new commit",
 			},
 			{
-				Name:    cli.CHANGELOG,
+				Name:    command.CHANGELOG,
 				Aliases: []string{"ch"},
-				Action:  cli.Changelog,
+				Action:  frontend.Changelog,
 				Usage:   "generate changelog (note that it will overwrite existing file)",
 			},
 			{
-				Name:    cli.BUMP,
+				Name:    command.BUMP,
 				Aliases: []string{"b"},
-				Action:  cli.Bump,
+				Action:  frontend.Bump,
 				Usage:   "bump semantic version based on the git log",
 			},
 			{
-				Name:    cli.ROLLBACK,
+				Name:    command.ROLLBACK,
 				Aliases: []string{"r"},
-				Action:  cli.Rollback,
+				Action:  frontend.Rollback,
 				Usage:   "revert commit to a specific tag",
 			},
 			{
-				Name:    cli.TAG,
+				Name:    command.TAG,
 				Aliases: []string{"t"},
-				Action:  cli.Tag,
+				Action:  frontend.Tag,
 				Usage:   "show tags",
 			},
 			{
-				Name:    cli.SCHEMA,
+				Name:    command.SCHEMA,
 				Aliases: []string{"s"},
-				Action:  cli.Schema,
+				Action:  frontend.Schema,
 				Usage:   "show commit schema",
 			},
 			{
-				Name:    cli.EXAMPLE,
+				Name:    command.EXAMPLE,
 				Aliases: []string{"e"},
-				Action:  cli.Example,
+				Action:  frontend.Example,
 				Usage:   "show commit example",
 			},
 			{
-				Name:    cli.VERSION,
+				Name:    command.VERSION,
 				Aliases: []string{"v"},
-				Action:  cli.Version,
+				Action:  frontend.Version,
 				Usage:   "get the version of the installed czen or the current project",
 			},
 		},

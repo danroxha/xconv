@@ -3,31 +3,27 @@ package setup
 import (
 	"errors"
 	"io/ioutil"
+	"reflect"
 
 	"gopkg.in/yaml.v3"
 )
 
-func (conf *Configuration) LoadConfigurationFile() error {
 
-	file := struct {
-		Configuration Configuration `yaml:"configuration"`
-	}{}
-
+func (conf *Configuration) LoadConfiguration() error {
+	
 	blob, err := ioutil.ReadFile(".czen.yaml")
 
 	if err != nil {
 		panic(err)
 	}
 
-	parseError := yaml.Unmarshal(blob, &file)
+	parseError := yaml.Unmarshal(blob, &conf)
 
 	if parseError != nil {
 		panic(parseError)
 	}
 
-	*conf = file.Configuration
-
-	if conf.Version == "" {
+	if conf.Role.Version == "" {
 		exitStd := ExitCodeStardard["NoVersionSpecifiedError"]
 		return errors.New(exitStd.Description)
 	}
@@ -35,13 +31,6 @@ func (conf *Configuration) LoadConfigurationFile() error {
 	return nil
 }
 
-func (conf *Configuration) FindCurrentProfileEnable() (Profile, error) {
-
-	for _, profile := range conf.Profiles {
-		if profile.Name == conf.ActiveProfile {
-			return profile, nil
-		}
-	}
-
-	return Profile{}, errors.New("Profile setupnot found or disabled")
+func (conf Configuration) IsEmpty() bool {
+	return reflect.DeepEqual((Configuration{}), conf)
 }

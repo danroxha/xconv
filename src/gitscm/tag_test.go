@@ -1,13 +1,8 @@
 package gitscm
 
 import (
-	"fmt"
 	"reflect"
-	"strings"
 	"testing"
-
-	"github.com/dannrocha/czen/src/cmd"
-	"github.com/dannrocha/czen/src/util"
 )
 
 func TestGivenATagCommitShowDetailsThenShouldToConvertToGitTagStruct(t *testing.T) {
@@ -112,92 +107,87 @@ func TestGivenATagCommitShowDetailsWithAuthorsNotTheSameThenShouldToConvertToGit
 	}
 }
 
+// func TestGivenATagGroupTheLoadTagGroup(t *testing.T) {
+// 	tags := generateTag()
+// 	rm := cmd.InternalCommand {
+// 		Application: "rm",
+// 		Args: []string{
+// 			"-rf",
+// 			"repository/",
+// 		},
+// 	}
 
+// 	defer rm.Execute()
 
-func TestGivenATagGroupTheLoadTagGroup(t *testing.T) {
-	tags := generateTag()
-	rm := cmd.InternalCommand {
-		Application: "rm",
-		Args: []string{
-			"-rf",
-			"repository/",
-		},
-	}
+// 	git := Git{
+// 		Command: map[string]cmd.InternalCommand{
+// 			"tag": {
+// 				Application: "sh",
+// 				Args: []string{
+// 					"-c",
+// 					`cd repository/ && git tag -l`,
+// 				},
+// 			},
+// 			"show": {
+// 				Application: "sh",
+// 				Args: []string{
+// 					"-c",
+// 					`cd repository/ && git show -q %v`,
+// 				},
+// 			},
+// 		},
+// 	}
 
-	defer rm.Execute()
+// 	git.LoadGitTags()
 
-	git := Git{
-		Command: map[string]cmd.InternalCommand{
-			"tag": {
-				Application: "sh",
-				Args: []string{
-					"-c",
-					`cd repository/ && git tag -l`,
-				},
-			},
-			"show": {
-				Application: "sh",
-				Args: []string{
-					"-c",
-					`cd repository/ && git show -q %v`,
-				},
-			},
-		},		
-	}
+// 	if !reflect.DeepEqual(git.Tags, tags) {
+// 		t.Errorf("Fail")
+// 	}
 
-	git.LoadGitTags()
+// }
 
-	if !reflect.DeepEqual(git.Tags, tags) {
-		t.Errorf("Fail")
-	}
+// func generateTag() []string {
 
-}
+// 	build := cmd.InternalCommand{
+// 		Application: "sh",
+// 		Args: []string{
+// 			"-c",
+// 			`mkdir -p repository \
+// 				&& cd repository \
+// 				&& git init \
+// 				&& touch README.md \
+// 				&& git add README.md \
+// 				&& git commit -m "message"
+// 			`,
+// 		},
+// 	}
 
+// 	build.Execute()
 
+// 	for i := 0; i < 5; i++ {
+// 		generate := cmd.InternalCommand{
+// 			Application: "sh",
+// 			Args: []string{
+// 				"-c",
+// 				fmt.Sprintf(`cd repository \
+// 					&& git tag -a v0.0.%v -m "T"
+// 				`, i),
+// 			},
+// 		}
 
-func generateTag() []string {
+// 		generate.Execute()
+// 	}
 
-	build := cmd.InternalCommand{
-		Application: "sh",
-		Args: []string{
-			"-c",
-			`mkdir -p repository \
-				&& cd repository \
-				&& git init \
-				&& touch README.md \
-				&& git add README.md \
-				&& git commit -m "message"
-			`,
-		},
-	}
-	
-	build.Execute()
+// 	tagList := cmd.InternalCommand{
+// 		Application: "sh",
+// 		Args: []string{
+// 			"-c",
+// 			`cd repository/ && git tag -l`,
+// 		},
+// 	}
 
+// 	out, _ := tagList.Execute()
 
-	for i := 0; i < 5; i++ {
-		generate := cmd.InternalCommand{
-			Application: "sh",
-			Args: []string{
-				"-c",
-				fmt.Sprintf(`cd repository \
-					&& git tag -a v0.0.%v -m "T"
-				`, i),
-			},
-		}
+// 	return util.RemoveContains(strings.Split(string(out), "\n"), "")
 
-		generate.Execute()
-	}
-
-	tagList := cmd.InternalCommand{
-		Application: "sh",
-		Args: []string{
-			"-c",
-			`cd repository/ && git tag -l`,
-		},
-	}
-
-	out, _ := tagList.Execute()
-
-	return util.RemoveContains(strings.Split(string(out), "\n"), "")
-
-}
+// }

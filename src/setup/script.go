@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/dannrocha/czen/src/cmd"
+	"github.com/dannrocha/czen/src/cli"
 	lua "github.com/yuin/gopher-lua"
 	"gopkg.in/yaml.v3"
 )
