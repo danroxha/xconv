@@ -9,10 +9,9 @@ import (
 
 func Example(c *cli.Context) error {
 
-	scrip := setup.Script{}
-	scrip.LoadScript()
+	script := setup.NewScript()
 
-	for _, auto := range scrip.Automation {
+	for _, auto := range script.Automation {
 		if auto.Bind == EXAMPLE && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
@@ -22,15 +21,9 @@ func Example(c *cli.Context) error {
 		}
 	}
 
-	conf := setup.Configuration{}
+	rule := setup.NewRule()
 
-	errConf := conf.LoadConfigurationFile()
-
-	if errConf != nil {
-		panic(errConf)
-	}
-
-	profile, errProf := conf.FindCurrentProfileEnable()
+	profile, errProf := rule.FindCurrentProfileEnable()
 
 	if errProf != nil {
 		panic(errProf)

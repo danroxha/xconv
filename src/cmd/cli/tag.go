@@ -12,10 +12,9 @@ import (
 
 func Tag(c *cli.Context) error {
 
-	scrip := setup.Script{}
-	scrip.LoadScript()
+	script := setup.NewScript()
 
-	for _, auto := range scrip.Automation {
+	for _, auto := range script.Automation {
 		if auto.Bind == TAG && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()

@@ -15,15 +15,12 @@ func Commit(c *cli.Context) error {
 
 	messages := make(map[string]string)
 
-	conf := setup.Configuration{}
-	scrip := setup.Script{}
+	rule := setup.NewRule()
+	script := setup.NewScript()
 
-	conf.LoadConfigurationFile()
-	scrip.LoadScript()
+	profile, profileErr := rule.FindCurrentProfileEnable()
 
-	profile, profileErr := conf.FindCurrentProfileEnable()
-
-	for _, auto := range scrip.Automation {
+	for _, auto := range script.Automation {
 
 		if auto.Bind == COMMIT && auto.Enable {
 			if auto.When == setup.BEFORE {
@@ -52,7 +49,7 @@ func Commit(c *cli.Context) error {
 	listInputGroup := setup.Question{}
 
 	for _, question := range profile.Questions {
-		if question.Type ==  setup.LIST {
+		if question.Type == setup.LIST {
 			listInputGroup = question
 			continue
 		}
@@ -123,11 +120,11 @@ func Commit(c *cli.Context) error {
 
 				clientInput = parse[input.Type](cmd.ReadInput(input.Message))
 
-				filter, isContaisFilter := scrip.FindByFilterName(input.Filter)
+				filter, isContaisFilter := script.FindByFilterName(input.Filter)
 
 				for _, middlewareName := range input.Middleware {
 
-					middleware, isContaisMiddleware := scrip.FindByMiddlewareName(middlewareName)
+					middleware, isContaisMiddleware := script.FindByMiddlewareName(middlewareName)
 
 					if isContaisMiddleware {
 						if middleware.Enable {

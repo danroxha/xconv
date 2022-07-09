@@ -1,8 +1,7 @@
-configuration:
+rule:
   version: 0.0.0
   changelog_file: CHANGELOG.md
   active_profile: czen_rabobank
-  update_changelog_on_bump: false
 
   profiles: 
   - name: czen_rabobank

@@ -9,10 +9,10 @@ import (
 
 func Schema(c *cli.Context) error {
 
-	scrip := setup.Script{}
-	scrip.LoadScript()
+	script := setup.NewScript()
 
-	for _, auto := range scrip.Automation {
+	
+	for _, auto := range script.Automation {
 		if auto.Bind == SCHEMA && auto.Enable {
 			if auto.When == setup.BEFORE {
 				auto.Run()
@@ -21,16 +21,10 @@ func Schema(c *cli.Context) error {
 			}
 		}
 	}
+		
+	rule := setup.NewRule()
 
-	conf := setup.Configuration{}
-
-	errConf := conf.LoadConfigurationFile()
-
-	if errConf != nil {
-		panic(errConf)
-	}
-
-	profile, errProf := conf.FindCurrentProfileEnable()
+	profile, errProf := rule.FindCurrentProfileEnable()
 
 	if errProf != nil {
 		panic(errProf)

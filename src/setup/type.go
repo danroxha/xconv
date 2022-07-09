@@ -34,12 +34,14 @@ type ExitCode struct {
 }
 
 type Configuration struct {
-	Name          string    `yaml:"name"`
+	Rule Rule `yaml:"rule"`
+	Script Script `yaml:"script"`
+}
+
+type Rule struct {
 	Version       string    `yaml:"version"`
-	VersionFiles  []string  `yaml:"version_files"`
 	ActiveProfile string    `yaml:"active_profile"`
 	ChangelogFile string    `yaml:"changelog_file"`
-	AnnotatedTag  bool      `yaml:"annotated_tag"`
 	Profiles      []Profile `yaml:"profiles"`
 }
 

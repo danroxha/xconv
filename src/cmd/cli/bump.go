@@ -14,8 +14,7 @@ import (
 
 func Bump(c *cli.Context) error {
 
-	script := setup.Script{}
-	script.LoadScript()
+	script := setup.NewScript()
 
 	for _, auto := range script.Automation {
 		if auto.Bind == BUMP && auto.Enable {
@@ -41,7 +40,6 @@ func Bump(c *cli.Context) error {
 
 	newVersion := incrementVersion(lastestTag)
 
-
 	annonation := newVersion.ConvertToSemver().Version
 	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annonation, time.Now())))
 
@@ -56,10 +54,8 @@ func Bump(c *cli.Context) error {
 
 func incrementVersion(tag gitscm.GitTag) semver.Version {
 
-	config := setup.Configuration{}
-	config.LoadConfigurationFile()
-
-	profile, errProfile := config.FindCurrentProfileEnable()
+	rule := setup.NewRule()
+	profile, errProfile := rule.FindCurrentProfileEnable()
 
 	if errProfile != nil {
 		panic(errProfile)

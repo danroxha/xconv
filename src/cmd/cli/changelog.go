@@ -6,8 +6,7 @@ import (
 )
 
 func Changelog(c *cli.Context) error {
-	scrip := setup.Script{}
-	scrip.LoadScript()
+	scrip := setup.NewScript()
 
 	for _, auto := range scrip.Automation {
 		if auto.Bind == CHANGELOG && auto.Enable {

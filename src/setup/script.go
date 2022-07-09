@@ -10,7 +10,15 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func (sc *Script) LoadScript() error {
+func NewScript() Script {
+	script := Script{}
+	
+	script.loadScriptFromFile()
+	
+	return script
+}
+
+func (sc *Script) loadScriptFromFile() error {
 	file := struct {
 		Script Script `yaml:"script"`
 	}{}

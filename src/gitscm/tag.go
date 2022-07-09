@@ -62,9 +62,8 @@ func New() (Git, error) {
 }
 
 func (git *Git) loadGitTags() error {
-	
-	tags, ok := findTagList()
 
+	tags, ok := findTagList()
 
 	if !ok {
 		return errors.New("fail in load tags")
@@ -73,17 +72,17 @@ func (git *Git) loadGitTags() error {
 	git.Tags = tags
 
 	for _, annotation := range git.Tags {
-		git.GitTags = append(git.GitTags,gitTagDetails(annotation))
+		git.GitTags = append(git.GitTags, gitTagDetails(annotation))
 	}
 
 	sort.Sort(GitTagGroup(git.GitTags))
 	git.GitTags = util.ReverseSlice(git.GitTags)
-	
+
 	return nil
 }
 
 func (git *Git) LastestTag() (GitTag, bool) {
-	
+
 	if git.IsTagsEmpty() {
 		return GitTag{}, false
 	}
@@ -92,13 +91,10 @@ func (git *Git) LastestTag() (GitTag, bool) {
 
 }
 
-
 func FormatCommit(messages map[string]string) (string, error) {
 
-	conf := setup.Configuration{}
-	conf.LoadConfigurationFile()
-
-	profile, profileErr := conf.FindCurrentProfileEnable()
+	rule := setup.NewRule()
+	profile, profileErr := rule.FindCurrentProfileEnable()
 
 	if profileErr != nil {
 		// exitStd := setupExitCodeStardard["InvalidConfigurationError"]
@@ -134,7 +130,6 @@ func FormatCommit(messages map[string]string) (string, error) {
 	return commitFormated, nil
 }
 
-
 func gitTagDetails(annotation string) GitTag {
 	show := cmd.InternalCommand{
 		Application: "git",
@@ -154,13 +149,13 @@ func gitTagDetails(annotation string) GitTag {
 	tagDetails := string(stdout)
 
 	return parseTag(tagDetails)
-} 
+}
 
 func (git Git) IsTagsEmpty() bool {
 	return len(git.Tags) == 0
 }
 
-func CreateTag(annonation string, message string) (bool, error){
+func CreateTag(annonation string, message string) (bool, error) {
 	tag := cmd.InternalCommand{
 		Application: "git",
 		Args: []string{
@@ -189,7 +184,7 @@ func findTagList() ([]string, bool) {
 			"-l",
 		},
 	}
-	
+
 	stdout, err := tag.Execute()
 
 	if err != nil {

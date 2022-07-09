@@ -39,8 +39,7 @@ func (version *Version) IncrementVersion(level string) {
 }
 
 func (version Version) ConvertToSemver() SemVer {
-	config := setup.Configuration{}
-	config.LoadConfigurationFile()
+	rule := setup.NewRule()
 
 	envs := map[string] string {
 		"$major": strconv.Itoa(version.Major),
@@ -49,7 +48,7 @@ func (version Version) ConvertToSemver() SemVer {
 		"$version": fmt.Sprintf("%v.%v.%v", version.Major, version.Minor, version.Path),
 	}
 
-	profile, errProfile := config.FindCurrentProfileEnable()
+	profile, errProfile := rule.FindCurrentProfileEnable()
 
 	if errProfile != nil {
 		panic(errProfile)
