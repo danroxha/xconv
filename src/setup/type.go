@@ -1,12 +1,13 @@
 package setup
+
 const (
-	LUA = "lua"
-	SH = "sh"
-	BEFORE = "before"
-	AFTER = "after"
-	LIST = "list"
+	LUA     = "lua"
+	SH      = "sh"
+	BEFORE  = "before"
+	AFTER   = "after"
+	LIST    = "list"
 	CONFIRM = "confirm"
-	INPUT = "input"
+	INPUT   = "input"
 )
 
 type Option struct {
@@ -37,7 +38,6 @@ type Configuration struct {
 	Version       string    `yaml:"version"`
 	VersionFiles  []string  `yaml:"version_files"`
 	ActiveProfile string    `yaml:"active_profile"`
-	TagFormat     string    `yaml:"tag_format"`
 	ChangelogFile string    `yaml:"changelog_file"`
 	AnnotatedTag  bool      `yaml:"annotated_tag"`
 	Profiles      []Profile `yaml:"profiles"`
@@ -53,6 +53,7 @@ type Profile struct {
 	MessageTemplate string            `yaml:"message_template"`
 	Questions       []Question        `yaml:"questions"`
 	Schema          string            `yaml:"schema"`
+	TagFormat       string            `yaml:"tag_format"`
 }
 
 type Message struct {
@@ -91,8 +92,6 @@ type Script struct {
 	Middleware []Middleware `yaml:"middleware"`
 	Automation []Automation `yaml:"automation"`
 }
-
-
 
 // https://github.com/commitizen-tools/commitizen/blob/master/docs/exit_codes.md
 var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{

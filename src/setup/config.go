@@ -7,6 +7,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+
+
 func (conf *Configuration) LoadConfigurationFile() error {
 
 	file := struct {

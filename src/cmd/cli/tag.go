@@ -25,8 +25,7 @@ func Tag(c *cli.Context) error {
 		}
 	}
 
-	git := gitscm.Git{}
-	err := git.LoadGitTags()
+	git, err := gitscm.New()
 
 	if err != nil {
 		panic(err.Error())

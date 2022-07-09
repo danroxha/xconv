@@ -3,13 +3,10 @@ configuration:
   changelog_file: CHANGELOG.md
   active_profile: czen_rabobank
   update_changelog_on_bump: false
-  annotated_tag: true
 
   profiles: 
   - name: czen_rabobank
-    tag:
-      format: v$version-SNAPSHOT # v$major.$minor.$patch$prerelease"
-      annotated: true
+    tag_format: v$version-SNAPSHOT # v$major.$minor.$patch$"
       
     bump_map:
       'BREAKING CHANGE': MAJOR
@@ -189,6 +186,14 @@ script:
     script: |
       LATEST_TAG=$(git tag --list | sort -h | tail -n 1)
       git push origin $LATEST_TAG
+  
+  - name: echo
+    enable: true
+    language: lua # sh | lua
+    bind: schema
+    when: before
+    script: |
+      print("Hello World")
 
   - name: toogle_version
     enable: true

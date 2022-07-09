@@ -2,6 +2,12 @@ package semver
 
 var MAJOR, MINOR, PATCH int = 0, 1, 2
 
+var MATCH = map[string]int {
+	"MAJOR": 1,
+	"MINOR": 2,
+	"PATCH": 3,
+}
+
 var SEMVER_REGEX string = `^(\w+)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`
 
 type Version struct {

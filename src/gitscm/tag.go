@@ -1,6 +1,7 @@
 package gitscm
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -49,68 +50,43 @@ func (version GitTagGroup) Less(i, j int) bool {
 	return false
 }
 
-func (git *Git) LoadGitTags() error {
-	if git.isUndefinedCommand() {
-
-		git.Command = make(map[string]cmd.InternalCommand)
-
-		git.Command["tag"] = cmd.InternalCommand{
-			Application: "git",
-			Args: []string{
-				"tag",
-				"-l",
-			},
-		}
-	}
-
-	stdout, err := git.Command["tag"].Execute()
+func New() (Git, error) {
+	git := Git{}
+	err := git.loadGitTags()
 
 	if err != nil {
-		fmt.Println(err.Error())
-		return err
+		return Git{}, err
 	}
 
-	git.Tags = util.RemoveContains(strings.Split(string(stdout), "\n"), "")
+	return git, nil
+}
+
+func (git *Git) loadGitTags() error {
 	
-	var command string
-
-	for _, version := range git.Tags {
-
-		if git.isUndefinedCommand() {
-			git.Command["show"] = cmd.InternalCommand{
-				Application: "git",
-				Args: []string{
-					"show",
-					"-q",
-					version,
-				},
-			}
-		}else {
-			// tests
-			MOCK_INDEX_ARG := 1
-			if command == "" {
-				command = git.Command["show"].Args[MOCK_INDEX_ARG]
-			}
-
-			git.Command["show"].Args[MOCK_INDEX_ARG] = fmt.Sprintf(command, version)
-		}
+	tags, ok := findTagList()
 
 
-		stdout, err = git.Command["show"].Execute()
+	if !ok {
+		return errors.New("fail in load tags")
+	}
 
-		if err != nil {
-			fmt.Println("git.tag.go", err)
-		}
+	git.Tags = tags
 
-		rawCommit := string(stdout)
-
-		git.GitTags = append(git.GitTags, ParseTag(rawCommit))
+	for _, annotation := range git.Tags {
+		git.GitTags = append(git.GitTags,gitTagDetails(annotation))
 	}
 
 	sort.Sort(GitTagGroup(git.GitTags))
+	git.GitTags = util.ReverseSlice(git.GitTags)
 	
 	return nil
 }
+
+func (git *Git) LastestTag() (GitTag, bool) {
+	// tags := git.GitTags
+	return GitTag{}, false
+}
+
 
 func FormatCommit(messages map[string]string) (string, error) {
 
@@ -153,8 +129,74 @@ func FormatCommit(messages map[string]string) (string, error) {
 	return commitFormated, nil
 }
 
+
+func gitTagDetails(annotation string) GitTag {
+	show := cmd.InternalCommand{
+		Application: "git",
+		Args: []string{
+			"show",
+			"-q",
+			annotation,
+		},
+	}
+
+	stdout, err := show.Execute()
+
+	if err != nil {
+		panic(err)
+	}
+
+	tagDetails := string(stdout)
+
+	return parseTag(tagDetails)
+} 
+
+func (git Git) IsTagsEmpty() bool {
+	return len(git.Tags) == 0
+}
+
+func CreateTag(annonation string, message string) (bool, error){
+	tag := cmd.InternalCommand{
+		Application: "git",
+		Args: []string{
+			"tag",
+			"-a",
+			annonation,
+			"-m",
+			message,
+		},
+	}
+
+	_, err := tag.Execute()
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func findTagList() ([]string, bool) {
+	tag := cmd.InternalCommand{
+		Application: "git",
+		Args: []string{
+			"tag",
+			"-l",
+		},
+	}
+	
+	stdout, err := tag.Execute()
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return []string{}, false
+	}
+
+	return util.RemoveContains(strings.Split(string(stdout), "\n"), ""), true
+}
+
 // https://play.golang.com/p/11oot1NWTPd
-func ParseTag(commit string) GitTag {
+func parseTag(commit string) GitTag {
 
 	tag := make(map[string]string)
 
@@ -204,16 +246,4 @@ func ParseTag(commit string) GitTag {
 			Date:   tag["datecommit"],
 		},
 	}
-}
-
-
-func (git Git) isUndefinedCommand() bool {
-	_, undefinedShow := git.Command["show"]
-	_, undefinedTag := git.Command["tag"]
-
-	return !undefinedShow || !undefinedTag
-}
-
-func (git Git) IsTagsEmpty() bool {
-	return len(git.Tags) == 0
 }

@@ -16,7 +16,7 @@ func New(Version string) SemVer {
 func (sem SemVer) FindVersion() (Version, error) {
 
 	if !sem.IsVersionValid() {
-		return Version{}, errors.New("Semantic version is invalid")
+		return Version{}, errors.New("semantic version is invalid")
 	}
 
 	regex := regexp.MustCompile(`(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)`)
@@ -27,7 +27,7 @@ func (sem SemVer) FindVersion() (Version, error) {
 	path, pathErr := strconv.Atoi(version[PATCH])
 
 	if majorErr != nil || minorErr != nil || pathErr != nil {
-		return Version{}, errors.New("Error converting version to integer")
+		return Version{}, errors.New("error converting version to integer")
 	}
 
 	return Version{

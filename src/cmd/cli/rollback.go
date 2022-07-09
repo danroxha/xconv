@@ -27,8 +27,7 @@ func Rollback(c *cli.Context) error {
 	}
 
 
-	git := gitscm.Git{}
-	err := git.LoadGitTags()
+	git, err := gitscm.New()
 
 	var items []string = []string{}
 

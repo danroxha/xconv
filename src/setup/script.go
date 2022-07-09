@@ -167,7 +167,7 @@ func (auto Automation) Run(args ...string) {
 
 		if err != nil {
 			throw := ExitCodeStardard["InvalidScriptFilter"]
-			fmt.Printf("%v: \n - %v::%v\n", throw.Description, auto.Language, auto.Name)
+			fmt.Printf("%v: \n - automation::%v::%v\n", throw.Description, auto.Language, auto.Name)
 			os.Exit(throw.ExitCode)
 		}
 
