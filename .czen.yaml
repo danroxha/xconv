@@ -196,7 +196,7 @@ script:
       print("Hello World")
 
   - name: toogle_version
-    enable: true
+    enable: false
     language: sh # sh | lua
     bind: bump
     when: after # before

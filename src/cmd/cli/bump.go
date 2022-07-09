@@ -35,17 +35,17 @@ func Bump(c *cli.Context) error {
 
 	lastestTag, ok := git.LastestTag()
 
-	newVersion := incrementVersion(lastestTag);
+	if !ok {
+		return nil
+	}
 
-	
-	fmt.Println()
+	newVersion := incrementVersion(lastestTag)
+
 
 	annonation := newVersion.ConvertToSemver().Version
-	hash := fmt.Sprintf("%v-%v", annonation, time.Now())
+	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annonation, time.Now())))
 
-	message := fmt.Sprintf("%x", hash)
-
-	ok, err = gitscm.CreateTag(annonation, message)
+	ok, err = gitscm.CreateTag(annonation, fmt.Sprintf("%x", hash))
 
 	if !ok || err != nil {
 		return nil
@@ -57,6 +57,7 @@ func Bump(c *cli.Context) error {
 func incrementVersion(tag gitscm.GitTag) semver.Version {
 
 	config := setup.Configuration{}
+	config.LoadConfigurationFile()
 
 	profile, errProfile := config.FindCurrentProfileEnable()
 
@@ -67,14 +68,14 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 	commits, errCommit := gitscm.LoadCommitsFrom(tag.Commit.Hash)
 
 	if errCommit != nil {
-		panic(errCommit)
+		panic(errCommit.Error())
 	}
 
 	currentSemever := semver.New(tag.Annotation)
 	oldVersion, errVersion := currentSemever.FindVersion()
 
 	if errVersion != nil {
-		panic(errVersion)
+		panic(errVersion.Error())
 	}
 
 	newVersion := semver.Version{
@@ -83,10 +84,12 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 		Path:  oldVersion.Path,
 	}
 
-	for context, pattern := range profile.BumpMap {
-		for _, commit := range commits {
+	for _, commit := range commits {
+
+		for context, pattern := range profile.BumpMap {
 			if strings.Contains(commit.Message, context) {
 				newVersion.IncrementVersion(pattern)
+				break
 			}
 		}
 	}

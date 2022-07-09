@@ -83,8 +83,13 @@ func (git *Git) loadGitTags() error {
 }
 
 func (git *Git) LastestTag() (GitTag, bool) {
-	// tags := git.GitTags
-	return GitTag{}, false
+	
+	if git.IsTagsEmpty() {
+		return GitTag{}, false
+	}
+
+	return git.GitTags[0], true
+
 }
 
 

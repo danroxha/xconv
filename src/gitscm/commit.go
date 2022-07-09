@@ -1,6 +1,7 @@
 package gitscm
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/dannrocha/czen/src/cmd"
@@ -13,10 +14,10 @@ func LoadCommitsFrom(beginFromCommit string) ([]GitCommit, error) {
 		Application: "git",
 		Args: []string{
 			"log",
-			"--online",
 			"--pretty=%H",
-			beginFromCommit,
-			"HEAD",
+			"--author-date-order",
+			"--reverse",
+			fmt.Sprintf(`%v..HEAD`, beginFromCommit),
 		},
 	}
 
