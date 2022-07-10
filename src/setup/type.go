@@ -63,30 +63,28 @@ type Message struct {
 	Color   bool   `yaml:"color"`
 }
 
-type Filter struct {
+type ScriptBase struct {
 	Name    string  `yaml:"name"`
-	Retry   bool    `yaml:"retry"`
-	Message Message `yaml:"message"`
 	Enable  bool    `yaml:"enable"`
 	Script  string  `yaml:"script"`
 	Type    string  `yaml:"type"`
 }
 
+type Filter struct {
+	ScriptBase
+	Retry   bool    `yaml:"retry"`
+	Message Message `yaml:"message"`
+}
+
 type Automation struct {
-	Name     string `yaml:"name"`
+	ScriptBase
 	Bind     string `yaml:"bind"`
 	Language string `yaml:"language"`
-	Enable   bool   `yaml:"enable"`
 	When     string `yaml:"when"`
-	Script   string `yaml:"script"`
-	Type     string `yaml:"type"`
 }
 
 type Middleware struct {
-	Name   string `yaml:"name"`
-	Enable bool   `yaml:"enable"`
-	Script string `yaml:"script"`
-	Type   string `yaml:"type"`
+	ScriptBase
 }
 
 type Script struct {
