@@ -12,12 +12,12 @@ func Schema(c *cli.Context) error {
 	script := setup.NewScript()
 
 	
-	for _, auto := range script.Automation {
-		if auto.Bind == SCHEMA && auto.Enable {
-			if auto.When == setup.BEFORE {
-				auto.Run()
+	for _, task := range script.Task {
+		if task.Bind == SCHEMA && task.Enable {
+			if task.When == setup.BEFORE {
+				task.Run()
 			} else {
-				defer auto.Run()
+				defer task.Run()
 			}
 		}
 	}

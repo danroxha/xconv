@@ -8,12 +8,12 @@ import (
 func Changelog(c *cli.Context) error {
 	scrip := setup.NewScript()
 
-	for _, auto := range scrip.Automation {
-		if auto.Bind == CHANGELOG && auto.Enable {
-			if auto.When == setup.BEFORE {
-				auto.Run()
+	for _, task := range scrip.Task {
+		if task.Bind == CHANGELOG && task.Enable {
+			if task.When == setup.BEFORE {
+				task.Run()
 			} else {
-				defer auto.Run()
+				defer task.Run()
 			}
 		}
 	}

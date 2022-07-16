@@ -20,13 +20,13 @@ func Commit(c *cli.Context) error {
 
 	profile, profileErr := rule.FindCurrentProfileEnable()
 
-	for _, auto := range script.Automation {
+	for _, task := range script.Task {
 
-		if auto.Bind == COMMIT && auto.Enable {
-			if auto.When == setup.BEFORE {
-				auto.Run()
+		if task.Bind == COMMIT && task.Enable {
+			if task.When == setup.BEFORE {
+				task.Run()
 			} else {
-				defer auto.Run()
+				defer task.Run()
 			}
 		}
 	}

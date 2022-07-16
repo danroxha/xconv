@@ -34,7 +34,7 @@ type ExitCode struct {
 }
 
 type Configuration struct {
-	Rule Rule `yaml:"rule"`
+	Rule   Rule   `yaml:"rule"`
 	Script Script `yaml:"script"`
 }
 
@@ -64,10 +64,10 @@ type Message struct {
 }
 
 type ScriptBase struct {
-	Name    string  `yaml:"name"`
-	Enable  bool    `yaml:"enable"`
-	Script  string  `yaml:"script"`
-	Type    string  `yaml:"type"`
+	Name   string `yaml:"name"`
+	Enable bool   `yaml:"enable"`
+	Script string `yaml:"script"`
+	Type   string `yaml:"type"`
 }
 
 type Filter struct {
@@ -76,7 +76,7 @@ type Filter struct {
 	Message Message `yaml:"message"`
 }
 
-type Automation struct {
+type Task struct {
 	ScriptBase
 	Bind     string `yaml:"bind"`
 	Language string `yaml:"language"`
@@ -90,7 +90,7 @@ type Middleware struct {
 type Script struct {
 	Filter     []Filter     `yaml:"filter"`
 	Middleware []Middleware `yaml:"middleware"`
-	Automation []Automation `yaml:"automation"`
+	Task       []Task       `yaml:"task"`
 }
 
 // https://github.com/commitizen-tools/commitizen/blob/master/docs/exit_codes.md

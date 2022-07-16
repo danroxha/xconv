@@ -159,15 +159,15 @@ func (filter Filter) Run(args ...string) bool {
 	return bool(result)
 }
 
-func (auto Automation) Run(args ...string) {
+func (task Task) Run(args ...string) {
 
-	if auto.Language == SH {
+	if task.Language == SH {
 
 		command := cmd.InternalCommand{
 			Application: "sh",
 			Args: []string{
 				"-c",
-				auto.Script,
+				task.Script,
 			},
 		}
 
@@ -175,7 +175,7 @@ func (auto Automation) Run(args ...string) {
 
 		if err != nil {
 			throw := ExitCodeStardard["InvalidScriptFilter"]
-			fmt.Printf("%v: \n - automation::%v::%v\n", throw.Description, auto.Language, auto.Name)
+			fmt.Printf("%v: \n - automation::%v::%v\n", throw.Description, task.Language, task.Name)
 			os.Exit(throw.ExitCode)
 		}
 
@@ -187,10 +187,10 @@ func (auto Automation) Run(args ...string) {
 	L := lua.NewState()
 	defer L.Close()
 
-	err := L.DoString(auto.Script)
+	err := L.DoString(task.Script)
 	if err != nil {
 		throw := ExitCodeStardard["InvalidScriptFilter"]
-		fmt.Println(throw.Description, ":", auto.Name)
+		fmt.Println(throw.Description, ":", task.Name)
 		os.Exit(throw.ExitCode)
 	}
 
