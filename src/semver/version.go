@@ -8,7 +8,13 @@ import (
 	"github.com/dannrocha/czen/src/setup"
 )
 
-func (version *Version) IncrementVersion(level string) {
+const (
+	STANDARD = "stardand"
+	ALPHA = "alpha"
+	BETA = "beta"	
+)
+
+func (version *Version) IncrementVersion(level string, mode string) {
 
 	increment := map[string]func(Version) Version {
 		"MAJOR": func(v Version) Version {
@@ -33,7 +39,15 @@ func (version *Version) IncrementVersion(level string) {
 		},
 	}
 
+
 	level = strings.ToUpper(level)
+	mode = strings.ToLower(mode)
+
+	if mode == ALPHA || mode == BETA {
+		if level == "MAJOR" {
+			level = "MINOR"
+		}
+	}
 
 	*version = increment[level](*version)
 }
@@ -54,7 +68,7 @@ func (version Version) ConvertToSemver() SemVer {
 		panic(errProfile)
 	}
 
-	format := profile.TagFormat
+	format := profile.Tag.Format
 
 	for match, content := range envs {
 		format = strings.Replace(format, match, content, -1)

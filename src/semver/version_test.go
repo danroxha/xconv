@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TesgivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectly(t *testing.T) {
+func TestGivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectly(t *testing.T) {
 	version := Version{
 		Major: 0,
 		Minor: 0,
@@ -18,9 +18,9 @@ func TesgivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectly(t *te
 		Path:  0,
 	}
 
-	version.IncrementVersion("major")
-	version.IncrementVersion("patch")
-	version.IncrementVersion("minor")
+	version.IncrementVersion("major", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
+	version.IncrementVersion("minor", STANDARD)
 
 	if !reflect.DeepEqual(expected, version) {
 		t.Fail()
@@ -40,9 +40,9 @@ func TestGivenTheVersionChangeThenMajorShouldTakePriority(t *testing.T) {
 		Path:  0,
 	}
 
-	version.IncrementVersion("patch")
-	version.IncrementVersion("minor")
-	version.IncrementVersion("major")
+	version.IncrementVersion("patch", STANDARD)
+	version.IncrementVersion("minor", STANDARD)
+	version.IncrementVersion("major", STANDARD)
 
 	if !reflect.DeepEqual(expected, version) {
 		t.Fail()
@@ -62,9 +62,9 @@ func TestGivenTheMAJOR_MIJORAndPATCHSequenceChangeVersionThenItShouldIncrementCo
 		Path:  1,
 	}
 
-	version.IncrementVersion("major")
-	version.IncrementVersion("minor")
-	version.IncrementVersion("patch")
+	version.IncrementVersion("major", STANDARD)
+	version.IncrementVersion("minor", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
 
 	if !reflect.DeepEqual(expected, version) {
 		t.Fail()
@@ -84,15 +84,59 @@ func TestGivenMultipleInterpolatedVersionUpThenItShouldIncrementCorrectly(t *tes
 		Path:  1,
 	}
 
-	version.IncrementVersion("minor")
-	version.IncrementVersion("patch")
-	version.IncrementVersion("patch")
-	version.IncrementVersion("minor")
-	version.IncrementVersion("major")
-	version.IncrementVersion("minor")
-	version.IncrementVersion("patch")
-	version.IncrementVersion("major")
-	version.IncrementVersion("patch")
+	version.IncrementVersion("minor", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
+	version.IncrementVersion("minor", STANDARD)
+	version.IncrementVersion("major", STANDARD)
+	version.IncrementVersion("minor", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
+	version.IncrementVersion("major", STANDARD)
+	version.IncrementVersion("patch", STANDARD)
+
+	if !reflect.DeepEqual(expected, version) {
+		t.Fail()
+	}
+}
+
+func TestGivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectlyOnAlphaMode(t *testing.T) {
+	version := Version{
+		Major: 0,
+		Minor: 0,
+		Path:  0,
+	}
+
+	expected := Version{
+		Major: 0,
+		Minor: 2,
+		Path:  0,
+	}
+
+	version.IncrementVersion("major", ALPHA)
+	version.IncrementVersion("patch", ALPHA)
+	version.IncrementVersion("minor", ALPHA)
+
+	if !reflect.DeepEqual(expected, version) {
+		t.Fail()
+	}
+}
+
+func TestGivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectlyOnBetaMode(t *testing.T) {
+	version := Version{
+		Major: 0,
+		Minor: 0,
+		Path:  0,
+	}
+
+	expected := Version{
+		Major: 0,
+		Minor: 2,
+		Path:  0,
+	}
+
+	version.IncrementVersion("major", BETA)
+	version.IncrementVersion("patch", BETA)
+	version.IncrementVersion("minor", BETA)
 
 	if !reflect.DeepEqual(expected, version) {
 		t.Fail()

@@ -45,6 +45,11 @@ type Rule struct {
 	Profiles      []Profile `yaml:"profiles"`
 }
 
+type Tag struct {
+	Format string `yaml:"format"`
+	Mode   string `yaml:"mode"`
+}
+
 type Profile struct {
 	Name            string            `yaml:"name"`
 	BumpMap         map[string]string `yaml:"bump_map"`
@@ -55,7 +60,7 @@ type Profile struct {
 	MessageTemplate string            `yaml:"message_template"`
 	Questions       []Question        `yaml:"questions"`
 	Schema          string            `yaml:"schema"`
-	TagFormat       string            `yaml:"tag_format"`
+	Tag             Tag               `yaml:"tag"`
 }
 
 type Message struct {

@@ -5,7 +5,9 @@ rule:
 
   profiles: 
   - name: czen_rabobank
-    tag_format: v$version-SNAPSHOT # v$major.$minor.$patch$"
+    tag:
+      mode: standard # alpha beta | default: standard
+      format: v$version-SNAPSHOT # v$major.$minor.$patch$"
       
     bump_map:
       'BREAKING CHANGE': MAJOR

@@ -84,7 +84,7 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 
 		for context, pattern := range profile.BumpMap {
 			if strings.Contains(commit.Message, context) {
-				newVersion.IncrementVersion(pattern)
+				newVersion.IncrementVersion(pattern, profile.Tag.Mode)
 				break
 			}
 		}
