@@ -73,15 +73,15 @@ func Rollback(c *cli.Context) error {
 	}
 
 	if !confirmation {
-
 		return nil
 	}
 
 	command := cmd.InternalCommand{
 		Application: "git",
 		Args: []string{
-			"reset",
-			"--hard",
+			"revert",
+			"--no-edit",
+			"--no-commit",
 			toTag.Commit.Hash,
 		},
 	}
