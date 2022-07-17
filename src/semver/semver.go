@@ -40,3 +40,11 @@ func (sem SemVer) FindVersion() (Version, error) {
 func (sem SemVer) IsVersionValid() bool {
 	return regexp.MustCompile(SEMVER_REGEX).MatchString(sem.Version)
 }
+
+func IsVersionValid(version string) error {
+	if regexp.MustCompile(SEMVER_REGEX).MatchString(version) {
+		return nil
+	}
+
+	return errors.New("semantic version is invalid")
+}

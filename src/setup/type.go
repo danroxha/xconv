@@ -106,6 +106,12 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 		Description: "Expected exit",
 	},
 
+	"FileSetupExist": {
+		Exception:   "FileSetupExist",
+		ExitCode:    1,
+		Description: "there is .czen.yaml configuration in the repository",
+	},
+
 	"NotAGitProjectError": {
 		Exception:   "NotAGitProjectError",
 		ExitCode:    2,
@@ -122,6 +128,12 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 		Exception:   "NoCommitsFoundError",
 		ExitCode:    4,
 		Description: "Version can not be found in configuration file [.czen.yaml]",
+	},
+
+	"NoPermissionOnDir": {
+		Exception:   "NoPermissionOnDir",
+		ExitCode:    5,
+		Description: "czen.yaml file cannot be create in the current directory",
 	},
 
 	"NothingToCommitError": {

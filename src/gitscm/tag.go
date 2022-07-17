@@ -176,6 +176,28 @@ func CreateTag(annonation string, message string) (bool, error) {
 	return true, nil
 }
 
+func CreateTagFrom(annonation, commit, message string) (bool, error) {
+	tag := cmd.InternalCommand{
+		Application: "git",
+		Args: []string{
+			"tag",
+			"-a",
+			annonation,
+			commit, 
+			"-m",
+			message,
+		},
+	}
+
+	_, err := tag.Execute()
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func findTagList() ([]string, bool) {
 	tag := cmd.InternalCommand{
 		Application: "git",
