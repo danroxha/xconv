@@ -142,7 +142,7 @@ rule:
 			# default: "Default value for name field"
 
 script:
-  filter:
+  filters:
 	- name: is empty
 		retry: true
 		enable: true
@@ -154,7 +154,7 @@ script:
 				return argument == nil or argument == ''
 			end
 
-  middleware:
+  middlewares:
 	- name: to lower case
 		enable: true
 		script: |
@@ -169,7 +169,7 @@ script:
 				return (string.gsub(argument, "^%s*(.-)%s*$", "%1"))
 			end
 
-  task:
+  tasks:
   - name: task example
     enable: true
     language: lua # sh | lua

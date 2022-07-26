@@ -93,9 +93,9 @@ type Middleware struct {
 }
 
 type Script struct {
-	Filter     []Filter     `yaml:"filter"`
-	Middleware []Middleware `yaml:"middleware"`
-	Task       []Task       `yaml:"task"`
+	Filter     []Filter     `yaml:"filters"`
+	Middleware []Middleware `yaml:"middlewares"`
+	Task       []Task       `yaml:"tasks"`
 }
 
 // https://github.com/commitizen-tools/commitizen/blob/master/docs/exit_codes.md
