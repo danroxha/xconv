@@ -50,17 +50,22 @@ type Tag struct {
 	Mode   string `yaml:"mode"`
 }
 
+type Bump struct {
+	Map     map[string]string `yaml:"map"`
+	Pattern string            `yaml:"pattern"`
+}
+
 type Profile struct {
-	Name            string            `yaml:"name"`
-	BumpMap         map[string]string `yaml:"bump_map"`
-	BumpPattern     string            `yaml:"bump_pattern"`
-	CommitParser    string            `yaml:"commit_parser"`
-	ChangeTypeOrder []string          `yaml:"change_type_order"`
-	Example         string            `yaml:"example"`
-	MessageTemplate string            `yaml:"message_template"`
-	Questions       []Question        `yaml:"questions"`
-	Schema          string            `yaml:"schema"`
-	Tag             Tag               `yaml:"tag"`
+	Bump            Bump       `yaml:"bump"`
+	Name            string     `yaml:"name"`
+	CommitParser    string     `yaml:"commit_parser"`
+	ChangeTypeOrder []string   `yaml:"change_type_order"`
+	Example         string     `yaml:"example"`
+	MessageTemplate string     `yaml:"message_template"`
+	Questions       []Question `yaml:"questions"`
+	Schema          string     `yaml:"schema"`
+	Tag             Tag        `yaml:"tag"`
+	Extends         string     `yaml:"extends"`
 }
 
 type Message struct {
@@ -115,19 +120,19 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"NotAGitProjectError": {
 		Exception:   "NotAGitProjectError",
 		ExitCode:    2,
-		Description: "Not in a git project",
+		Description: "not a git repository (or any of the parent directories): .git",
 	},
 
 	"NoCommitsFoundError": {
 		Exception:   "NoCommitsFoundError",
 		ExitCode:    3,
-		Description: "No commit found",
+		Description: "no commit found",
 	},
 
 	"NoVersionSpecifiedError": {
 		Exception:   "NoCommitsFoundError",
 		ExitCode:    4,
-		Description: "Version can not be found in configuration file [.xconv.yaml]",
+		Description: "version can not be found in configuration file [.xconv.yaml]",
 	},
 
 	"NoPermissionOnDir": {
@@ -136,16 +141,27 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 		Description: ".xconv.yaml file cannot be create in the current directory",
 	},
 
+	"BumpRegexInvalid": {
+		Exception:   "BumpRegexInvalid",
+		ExitCode:    6,
+		Description: "bump.pattern in .xconv.yaml invalid",
+	},
+	"GitNotFound": {
+		Exception:   "GitNotFound",
+		ExitCode:    7,
+		Description: "git not found!. visit <https://git-scm.com/> to install",
+	},
+
 	"NothingToCommitError": {
 		Exception:   "NothingToCommitError",
 		ExitCode:    11,
-		Description: "Nothing in staging to be committed",
+		Description: "nothing in staging to be committed",
 	},
 
 	"MissingConfigError": {
 		Exception:   "MissingConfigError",
 		ExitCode:    15,
-		Description: "Configuration missed for .xconv.yaml",
+		Description: "configuration missed for .xconv.yaml",
 	},
 
 	"CurrentVersionNotFoundError": {
@@ -157,18 +173,23 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"InvalidConfigurationError": {
 		Exception:   "InvalidConfigurationError",
 		ExitCode:    19,
-		Description: "An error was found in the xconv configuration",
+		Description: "an error was found in the xconv configuration",
 	},
 
 	"NoneIncrementExit": {
 		Exception: "InvalidConfigurationError",
 		ExitCode:  21,
-		Description: "	The commits found are not elegible to be bumped",
+		Description: "the commits found are not elegible to be bumped",
 	},
 
 	"InvalidScriptFilter": {
 		Exception:   "InvalidScriptFilter",
 		ExitCode:    22,
-		Description: "An error was found in the script",
+		Description: "an error was found in the script",
+	},
+	"InvalidProfile": {
+		Exception: "InvalidProfile",
+		ExitCode: 23,
+		Description: "profiles have recursive inheritance",
 	},
 }

@@ -12,6 +12,7 @@ require (
 	github.com/daviddengcn/go-colortext v1.0.0 // indirect
 	github.com/dixonwille/wmenu v4.0.2+incompatible // indirect
 	github.com/flosch/pongo2/v6 v6.0.0 // indirect
+	github.com/imdario/mergo v0.3.13
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

@@ -11,6 +11,7 @@ func Schema(c *cli.Context) error {
 
 	script := setup.NewScript()
 
+	fmt.Println(setup.XCONVFileContent)
 	
 	for _, task := range script.Task {
 		if task.Bind == SCHEMA && task.Enable {

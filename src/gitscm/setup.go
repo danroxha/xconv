@@ -2,12 +2,12 @@ package gitscm
 
 import (
 	"runtime"
+	"strings"
 
 	"github.com/dannrocha/xconv/src/cmd"
 )
 
 func IsGitInstalled() bool {
-
 	var command string
 
 	if runtime.GOOS == "windows" {

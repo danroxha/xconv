@@ -25,10 +25,10 @@ func (sc *Script) loadScriptFromFile() error {
 		Script Script `yaml:"script"`
 	}{}
 
-	blob, err := ioutil.ReadFile(".xconv.yaml")
+	blob, err := ioutil.ReadFile(Filename)
 
 	if err != nil {
-		panic(err)
+		blob = XCONVFileContent
 	}
 
 	parseError := yaml.Unmarshal(blob, &file)

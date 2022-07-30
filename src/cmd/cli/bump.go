@@ -81,9 +81,22 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 	}
 
 	for _, commit := range commits {
+		for context, pattern := range profile.Bump.Map {
+			if profile.Bump.Pattern != "" {
+				regex, err := regexp.Compile(profile.Bump.Pattern)
 
-		for context, pattern := range profile.BumpMap {
-			if strings.Contains(commit.Message, context) {
+				if err != nil {
+					exception := setup.ExitCodeStardard["BumpRegexInvalid"]
+					fmt.Println(exception.Description)
+					os.Exit(exception.ExitCode)
+				}
+
+				if regex.Match([]byte(commit.Message)) {
+					newVersion.IncrementVersion(pattern, profile.Tag.Mode)
+				}
+
+				break
+			} else if strings.Contains(commit.Message, context) {
 				newVersion.IncrementVersion(pattern, profile.Tag.Mode)
 				break
 			}
