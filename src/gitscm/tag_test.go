@@ -16,7 +16,7 @@ func TestGivenATagCommitShowDetailsThenShouldToConvertToGitTagStruct(t *testing.
 		Author: Daniel Rocha <rochadaniel@acad.ifma.edu.br>
 		Date:   Mon Jul 4 18:26:02 2022 -0300
 
-			chore(.czen.yaml): new attributes added
+			chore(.xconv.yaml): new attributes added
 
 			BREAKING CHANGE:
 	`
@@ -50,7 +50,7 @@ func TestGivenATagCommitShowDetailswithoutStandardThenShouldToConvertToGitTagStr
 		Author: Daniel Rocha <rochadaniel@acad.ifma.edu.br>
 		Date:   Mon Jul 4 18:26:02 2022 -0300
 
-			chore(.czen.yaml): new attributes added
+			chore(.xconv.yaml): new attributes added
 
 			BREAKING CHANGE:
 	`
@@ -84,7 +84,7 @@ func TestGivenATagCommitShowDetailsWithAuthorsNotTheSameThenShouldToConvertToGit
 		Author: Daniel Rocha <rochadaniel@acad.ifma.edu.br>
 		Date:   Mon Jul 4 18:26:02 2022 -0300
 
-			chore(.czen.yaml): new attributes added
+			chore(.xconv.yaml): new attributes added
 
 			BREAKING CHANGE:
 	`

@@ -109,7 +109,7 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"FileSetupExist": {
 		Exception:   "FileSetupExist",
 		ExitCode:    1,
-		Description: "there is .czen.yaml configuration in the repository",
+		Description: "there is .xconv.yaml configuration in the repository",
 	},
 
 	"NotAGitProjectError": {
@@ -127,13 +127,13 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"NoVersionSpecifiedError": {
 		Exception:   "NoCommitsFoundError",
 		ExitCode:    4,
-		Description: "Version can not be found in configuration file [.czen.yaml]",
+		Description: "Version can not be found in configuration file [.xconv.yaml]",
 	},
 
 	"NoPermissionOnDir": {
 		Exception:   "NoPermissionOnDir",
 		ExitCode:    5,
-		Description: "czen.yaml file cannot be create in the current directory",
+		Description: ".xconv.yaml file cannot be create in the current directory",
 	},
 
 	"NothingToCommitError": {
@@ -145,7 +145,7 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"MissingConfigError": {
 		Exception:   "MissingConfigError",
 		ExitCode:    15,
-		Description: "Configuration missed for .czen.yaml",
+		Description: "Configuration missed for .xconv.yaml",
 	},
 
 	"CurrentVersionNotFoundError": {
@@ -157,7 +157,7 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	"InvalidConfigurationError": {
 		Exception:   "InvalidConfigurationError",
 		ExitCode:    19,
-		Description: "An error was found in the czen configuration",
+		Description: "An error was found in the xconv configuration",
 	},
 
 	"NoneIncrementExit": {

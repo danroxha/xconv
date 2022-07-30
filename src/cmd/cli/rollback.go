@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/dannrocha/czen/src/cmd"
-	"github.com/dannrocha/czen/src/gitscm"
-	"github.com/dannrocha/czen/src/setup"
+	"github.com/dannrocha/xconv/src/cmd"
+	"github.com/dannrocha/xconv/src/gitscm"
+	"github.com/dannrocha/xconv/src/setup"
 	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli/v2"
 )

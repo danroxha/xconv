@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/dannrocha/czen/src/setup"
+	"github.com/dannrocha/xconv/src/setup"
 	"github.com/urfave/cli/v2"
 )
 

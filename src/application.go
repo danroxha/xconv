@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/dannrocha/czen/src/cmd/cli"
+	"github.com/dannrocha/xconv/src/cmd/cli"
 	CLI "github.com/urfave/cli/v2"
 )
 
@@ -17,7 +17,7 @@ func Run() {
 	}
 
 	app := &CLI.App{
-		Name:     "czen",
+		Name:     "xconv",
 		Compiled: time.Now(),
 		Authors: []*CLI.Author{
 			{
@@ -28,7 +28,7 @@ func Run() {
 		Copyright: "(c) 2022 MIT",
 		HelpName:  "contrive",
 		Usage:     "Commit ZEN is a cli tool to generate conventional commits.",
-		UsageText: "czen [-h] {init,commit,example,info,tag,schema,bump,changelog,version}",
+		UsageText: "xconv [-h] {init,commit,example,info,tag,schema,bump,changelog,version}",
 		ArgsUsage: "[args and such]",
 		HideHelp:  false,
 		Commands: []*CLI.Command{
@@ -36,7 +36,7 @@ func Run() {
 				Name:    cli.INIT,
 				Aliases: []string{"i"},
 				Action:  cli.Init,
-				Usage:   "init czen configuration",
+				Usage:   "init xconv configuration",
 			},
 			{
 				Name:    cli.COMMIT,
@@ -84,7 +84,7 @@ func Run() {
 				Name:    cli.VERSION,
 				Aliases: []string{"v"},
 				Action:  cli.Version,
-				Usage:   "get the version of the installed czen or the current project",
+				Usage:   "get the version of the installed xconv or the current project",
 			},
 		},
 	}

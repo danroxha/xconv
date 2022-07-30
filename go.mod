@@ -1,4 +1,4 @@
-module github.com/dannrocha/czen
+module github.com/dannrocha/xconv
 
 go 1.18
 

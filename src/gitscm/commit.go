@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/dannrocha/czen/src/cmd"
-	"github.com/dannrocha/czen/src/util"
+	"github.com/dannrocha/xconv/src/cmd"
+	"github.com/dannrocha/xconv/src/util"
 )
 
 func LoadCommitFromBegin() ([]GitCommit, error) {

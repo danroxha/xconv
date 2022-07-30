@@ -22,7 +22,7 @@ func (conf *Rule) loadRuleFromFile() error {
 		Rule Rule `yaml:"rule"`
 	}{}
 
-	blob, err := ioutil.ReadFile(".czen.yaml")
+	blob, err := ioutil.ReadFile(".xconv.yaml")
 
 	if err != nil {
 		panic(err)

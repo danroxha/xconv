@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dannrocha/czen/src/cmd"
-	"github.com/dannrocha/czen/src/semver"
-	"github.com/dannrocha/czen/src/setup"
-	"github.com/dannrocha/czen/src/util"
+	"github.com/dannrocha/xconv/src/cmd"
+	"github.com/dannrocha/xconv/src/semver"
+	"github.com/dannrocha/xconv/src/setup"
+	"github.com/dannrocha/xconv/src/util"
 	"github.com/flosch/pongo2"
 )
 

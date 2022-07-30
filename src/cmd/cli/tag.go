@@ -5,8 +5,8 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/dannrocha/czen/src/gitscm"
-	"github.com/dannrocha/czen/src/setup"
+	"github.com/dannrocha/xconv/src/gitscm"
+	"github.com/dannrocha/xconv/src/setup"
 	"github.com/urfave/cli/v2"
 )
 

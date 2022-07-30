@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dannrocha/czen/src/setup"
+	"github.com/dannrocha/xconv/src/setup"
 )
 
 const (

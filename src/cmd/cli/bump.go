@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dannrocha/czen/src/gitscm"
-	"github.com/dannrocha/czen/src/semver"
-	"github.com/dannrocha/czen/src/setup"
+	"github.com/dannrocha/xconv/src/gitscm"
+	"github.com/dannrocha/xconv/src/semver"
+	"github.com/dannrocha/xconv/src/setup"
 	"github.com/urfave/cli/v2"
 )
 

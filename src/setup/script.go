@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/dannrocha/czen/src/cmd"
+	"github.com/dannrocha/xconv/src/cmd"
 	lua "github.com/yuin/gopher-lua"
 	"gopkg.in/yaml.v3"
 )
@@ -23,7 +23,7 @@ func (sc *Script) loadScriptFromFile() error {
 		Script Script `yaml:"script"`
 	}{}
 
-	blob, err := ioutil.ReadFile(".czen.yaml")
+	blob, err := ioutil.ReadFile(".xconv.yaml")
 
 	if err != nil {
 		panic(err)

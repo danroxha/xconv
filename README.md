@@ -1,4 +1,4 @@
-# CZEN - Commit ZEN
+# XCONV - X Convertional
 Expired Study Project on [Committizen](https://github.com/commitizen-tools/commitizen)
 ## Requirements
 - [Git] `^2.`+
@@ -7,27 +7,27 @@ Expired Study Project on [Committizen](https://github.com/commitizen-tools/commi
 Run in your terminal
 
 ```bash
-czen help
+xc help
 ```
 
 or the shortcut
 
 ```bash
-czen h
+xc h
 ```
 - output
 ```
 NAME:
-   czen - Commit ZEN is a cli tool to generate conventional commits.
+   xc - X Convertional is a cli tool to generate conventional commits and versioning.
 
 USAGE:
-   czen [-h] {init,commit,example,info,tag,schema,bump,changelog,version}
+   xc [-h] {init,commit,example,info,tag,schema,bump,changelog,version}
 
 AUTHOR:
    Rocha da Silva, Daniel <rochadaniel@acad.ifma.edu.br>
 
 COMMANDS:
-   init, i        init czen configuration
+   init, i        init xconv configuration
    commit, c      create new commit
    changelog, ch  generate changelog (note that it will overwrite existing file)
    bump, b        bump semantic version based on the git log
@@ -35,7 +35,7 @@ COMMANDS:
    tag, t         show tags
    schema, s      show commit schema
    example, e     show commit example
-   version, v     get the version of the installed czen or the current project
+   version, v     get the version of the installed xconv or the current project
    help, h        Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -48,36 +48,36 @@ COPYRIGHT:
 ### Committing
 
 ```bash
-czen commit
+xc commit
 ```
 
 or the shortcut
 
 ```bash
-czen c
+xc c
 ```
 
 ### Rollback to Tag
 
 ```bash
-czen rollback
+xc rollback
 ```
 
 or the shortcut
 
 ```bash
-czen r
+xc r
 ```
 
 ### Show tags
 
 ```bash
-czen tag
+xc tag
 ```
 
 or the shortcut
 
 ```bash
-czen t
+xc t
 ```
 Select the tag for rollback and confirm

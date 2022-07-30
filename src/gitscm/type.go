@@ -1,6 +1,6 @@
 package gitscm
 
-import "github.com/dannrocha/czen/src/cmd"
+import "github.com/dannrocha/xconv/src/cmd"
 
 
 type Git struct {

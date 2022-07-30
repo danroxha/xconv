@@ -1,7 +1,7 @@
 package main
 
 import (
-	application "github.com/dannrocha/czen/src"
+	application "github.com/dannrocha/xconv/src"
 )
 
 func main() {

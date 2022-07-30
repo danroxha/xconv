@@ -1,13 +1,13 @@
 package setup
 
-var CZENFileContent string = `
+var XCONVFileContent string = `
 rule:
   version: 0.0.0
   changelog_file: CHANGELOG.md
-  active_profile: czen_standard
+  active_profile: xconv_default
 
   profiles: 
-  - name: czen_rabobank
+  - name: xconv_default
     tag:
       mode: standard # alpha beta | default: standard
       format: v$version-SNAPSHOT # v$major.$minor.$patch$"
@@ -57,8 +57,8 @@ rule:
       see the work item for details on the typos fixed\n\n
       related work items #12
     "
-    info: This is custom info from rabobank czen
-    info_path: czen_info.txt
+    info: This is default info from xconv
+    info_path: xconv_info.txt
 
     message_template: "{{prefix}}({{scope}}): {{subject}}\n\n{% if body != '' %}{{body}}\n\n{% endif %}{% if is_breaking_change %}BREAKING CHANGE: {% endif %}{% if footer != '' %}Related work items: #{{footer}}{% endif %}"
     questions:
@@ -91,7 +91,7 @@ rule:
 				name: "test: Adding missing or correcting existing tests"
 
 			- value: chore
-				name: "chore: Changes to configuration files  (example scopes: .gitignore, .czen.yaml)"
+				name: "chore: Changes to configuration files  (example scopes: .gitignore, .xconv.yaml)"
 
 			- value: build
 				name: "build: Changes that affect the build system or external dependencies (example scopes: pip, docker, npm)"
@@ -179,7 +179,7 @@ script:
       print("Hello World")
 `
 
-var Filename string = ".czen.yaml"
+var Filename string = ".xconv.yaml"
 
 func NewConfiguration() Configuration {
 	return Configuration{
