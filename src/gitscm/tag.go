@@ -237,15 +237,15 @@ func parseTag(commit string) GitTag {
 		},
 
 		"datetag": func(content string) string {
-			regex := regexp.MustCompile(`(\w+:\s+[[:word:]]+\s+[[:word:]]+\s+[1-9]{1,2}\s+[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}\s+[0-9]{1,4}\s+.\d+)`)
+			regex := regexp.MustCompile(`\w+:\s+(\w+\s+)+(\d:?|\s+?)+\s+(.?\d+)`)
 			match := regex.FindAllStringSubmatch(content, -1)
-			firstDate := match[0][1]
+			firstDate := match[0][0]
 			return strings.TrimSpace(strings.Split(firstDate, ": ")[1])
 		},
 		"datecommit": func(content string) string {
-			regex := regexp.MustCompile(`(\w+:\s+[[:word:]]+\s+[[:word:]]+\s+[1-9]{1,2}\s+[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}\s+[0-9]{1,4}\s+.\d+)`)
+			regex := regexp.MustCompile(`\w+:\s+(\w+\s+)+(\d:?|\s+?)+\s+(.?\d+)`)
 			match := regex.FindAllStringSubmatch(content, -1)
-			secondDate := match[1][1]
+			secondDate := match[1][0]
 			return strings.TrimSpace(strings.Split(secondDate, ": ")[1])
 		},
 		"annonation": func(content string) string {
