@@ -203,12 +203,21 @@ script:
       git push origin $LATEST_TAG
   
   - name: echo
-    enable: true
+    enable: false
     language: lua # sh | lua
     bind: schema
     when: before
     script: |
       print("Hello World")
+
+  - name: push current tag
+    enable: true
+    language: sh # sh | lua
+    bind: schema
+    when: after
+    script: |
+      CURRENT_TAG=$(xc tag current --format=%V)
+      git push origin $CURRENT_TAG
 
   - name: toogle_version
     enable: false

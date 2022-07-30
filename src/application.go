@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/dannrocha/xconv/src/cmd/cli"
+	"github.com/dannrocha/xconv/src/cmd/cli/subcmd"
 	"github.com/dannrocha/xconv/src/gitscm"
 	CLI "github.com/urfave/cli/v2"
 )
@@ -75,6 +76,22 @@ func Run() {
 				Aliases: []string{"t"},
 				Action:  cli.Tag,
 				Usage:   "show tags",
+				Subcommands: []*CLI.Command{
+					{
+						Name:    "current",
+						Aliases: []string{"c"},
+						Usage:   "last tag from project",
+						Flags: []CLI.Flag{
+							&CLI.StringFlag{
+									Name:  "format",
+									Aliases: []string{"f"},
+									Required: false,
+									Usage: "Set format tag: [ %V ]",
+							},
+					},
+						Action:  subcmd.TagCurrent,
+					},
+				},
 			},
 			{
 				Name:    cli.SCHEMA,
