@@ -76,20 +76,20 @@ type ScriptBase struct {
 }
 
 type Filter struct {
-	ScriptBase
-	Retry   bool    `yaml:"retry"`
-	Message Message `yaml:"message"`
+	ScriptBase `yaml:",inline"`
+	Retry      bool    `yaml:"retry"`
+	Message    Message `yaml:"message"`
 }
 
 type Task struct {
-	ScriptBase
-	Bind     string `yaml:"bind"`
-	Language string `yaml:"language"`
-	When     string `yaml:"when"`
+	ScriptBase `yaml:",inline"`
+	Bind       string `yaml:"bind"`
+	Language   string `yaml:"language"`
+	When       string `yaml:"when"`
 }
 
 type Middleware struct {
-	ScriptBase
+	ScriptBase `yaml:",inline"`
 }
 
 type Script struct {
