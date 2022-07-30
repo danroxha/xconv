@@ -16,6 +16,7 @@ func NewScript() Script {
 	script := Script{}
 
 	script.loadScriptFromFile()
+	script.setDefaultScripts()
 
 	return script
 }
@@ -221,7 +222,6 @@ func (task Task) Run(args ...string) {
 }
 
 func findShExecutable() string {
-
 	shLocale := cmd.InternalCommand{
 		Application: `where`,
 			Args: []string{
@@ -240,5 +240,21 @@ func findShExecutable() string {
 	gitFullPath := strings.Join(slicePath[:len(slicePath)-2], `\`)
 
 	return gitFullPath + `\bin\sh.exe`
+}
+
+func (sc *Script) setDefaultScripts() {
+	defaultScript := struct {
+		Script Script `yaml:"script"`
+	}{}
+
+	err := yaml.Unmarshal(XCONVFileContent, &defaultScript)
+
+	if err != nil {
+		panic(err)
+	}
+
+	sc.Filter = append(sc.Filter, defaultScript.Script.Filter...)
+	sc.Middleware = append(sc.Middleware, defaultScript.Script.Middleware...)
+	sc.Task = append(sc.Task, defaultScript.Script.Task...)	
 
 }
