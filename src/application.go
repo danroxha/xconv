@@ -1,15 +1,23 @@
 package application
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"github.com/dannrocha/xconv/src/cmd/cli"
+	"github.com/dannrocha/xconv/src/gitscm"
 	CLI "github.com/urfave/cli/v2"
 )
 
 func Run() {
+
+	if !gitscm.IsGitInstalled() {
+		fmt.Println("git not found!. visit <https://git-scm.com/> to install")
+		return
+	}
+
 	CLI.VersionFlag = &CLI.BoolFlag{
 		Name:    "version",
 		Aliases: []string{"v"},
@@ -27,7 +35,7 @@ func Run() {
 		},
 		Copyright: "(c) 2022 MIT",
 		HelpName:  "contrive",
-		Usage:     "XConventional is a cli tool to generate conventional commits.",
+		Usage:     "XConventional is a cli tool to generate conventional commits and versioning.",
 		UsageText: "xconv [-h] {init,commit,example,info,tag,schema,bump,changelog,version}",
 		ArgsUsage: "[args and such]",
 		HideHelp:  false,

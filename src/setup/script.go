@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"runtime"
+	"strings"
 
 	"github.com/dannrocha/xconv/src/cmd"
 	lua "github.com/yuin/gopher-lua"
@@ -12,9 +14,9 @@ import (
 
 func NewScript() Script {
 	script := Script{}
-	
+
 	script.loadScriptFromFile()
-	
+
 	return script
 }
 
@@ -163,8 +165,16 @@ func (task Task) Run(args ...string) {
 
 	if task.Language == SH {
 
+		var binarySh string
+
+		if runtime.GOOS == "windows" {
+			binarySh = findShExecutable()
+		} else {
+			binarySh = `sh`
+		}
+
 		command := cmd.InternalCommand{
-			Application: "sh",
+			Application: binarySh,
 			Args: []string{
 				"-c",
 				task.Script,
@@ -208,4 +218,27 @@ func (task Task) Run(args ...string) {
 		},
 		arguments...,
 	)
+}
+
+func findShExecutable() string {
+
+	shLocale := cmd.InternalCommand{
+		Application: `where`,
+			Args: []string{
+				`git`,
+			},
+	}
+
+	output, err := shLocale.Execute()
+
+	if err != nil {
+		panic(err)
+	}
+
+	binaryGitPath := string(output)
+	slicePath := strings.Split(binaryGitPath, `\`)
+	gitFullPath := strings.Join(slicePath[:len(slicePath)-2], `\`)
+
+	return gitFullPath + `\bin\sh.exe`
+
 }
