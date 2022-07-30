@@ -213,7 +213,7 @@ script:
   - name: push current tag
     enable: true
     language: sh # sh | lua
-    bind: schema
+    bind: bump
     when: after
     script: |
       CURRENT_TAG=$(xc tag current --format=%V)
