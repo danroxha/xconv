@@ -3,6 +3,8 @@ package cli
 import (
 	"crypto/md5"
 	"fmt"
+	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -41,6 +43,12 @@ func Bump(c *cli.Context) error {
 	newVersion := incrementVersion(lastestTag)
 
 	annonation := newVersion.ConvertToSemver().Version
+
+	if annonation == lastestTag.Annotation {
+		fmt.Println("there are no relevant changes for a new version")
+		return nil
+	}
+
 	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annonation, time.Now())))
 
 	ok, err = gitscm.CreateTag(annonation, fmt.Sprintf("%x", hash))

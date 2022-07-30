@@ -9,13 +9,22 @@ import (
 	"github.com/dannrocha/xconv/src/cmd/cli"
 	"github.com/dannrocha/xconv/src/cmd/cli/subcmd"
 	"github.com/dannrocha/xconv/src/gitscm"
+	"github.com/dannrocha/xconv/src/setup"
 	CLI "github.com/urfave/cli/v2"
 )
 
 func Run() {
-
 	if !gitscm.IsGitInstalled() {
-		fmt.Println("git not found!. visit <https://git-scm.com/> to install")
+		exception := setup.ExitCodeStardard["GitNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
+		return
+	}
+
+	if !gitscm.IsGitRepository() {
+		exception := setup.ExitCodeStardard["NotAGitProjectError"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
 		return
 	}
 

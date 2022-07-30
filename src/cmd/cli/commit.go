@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/dannrocha/xconv/src/cmd"
@@ -12,6 +13,12 @@ import (
 )
 
 func Commit(c *cli.Context) error {
+
+	if gitscm.IsStageAreaEmpty() {
+		exception := setup.ExitCodeStardard["NothingToCommitError"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
+	}
 
 	messages := make(map[string]string)
 

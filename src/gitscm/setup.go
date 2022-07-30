@@ -28,3 +28,34 @@ func IsGitInstalled() bool {
 	return err == nil
 
 }
+
+func IsStageAreaEmpty() bool {
+	command := cmd.InternalCommand{
+		Application: `git`,
+		Args: []string{
+			`diff`,
+			`--staged`,
+		},
+	}
+
+	output, err := command.Execute()
+
+	if err != nil {
+		return err == nil
+	}
+
+	return strings.Replace(string(output), " ", "", -1) == ""
+}
+
+func IsGitRepository() bool {
+	command := cmd.InternalCommand{
+		Application: `git`,
+		Args: []string{
+			`status`,
+		},
+	}
+
+	_, err := command.Execute()
+
+	return err == nil
+}
