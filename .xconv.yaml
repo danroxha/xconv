@@ -41,19 +41,21 @@ rule:
     
     schema_pattern: (build|ci|docs|feature|bugfix|hotfix|perf|refactor|style|test|chore|revert|bump):(\(\S+\))?!?:(\s.*)
 
-    schema: "
-      <prefix>(<scope>): <subject>\n
-      <BLANK LINE>\n
-      <body>\n
-      <BLANK LINE>\n 
-      (BREAKING CHANGE: <footer> ) \n
+    schema: |
+      <prefix>(<scope>): <subject>
+      <BLANK LINE>
+      <body>
+      <BLANK LINE>
+      (BREAKING CHANGE: <footer> )
       <footer>
-    "
-    example: "
-      bugfix: correct minor typos in code\n\n
-      see the work item for details on the typos fixed\n\n
+    
+    example: |
+      bugfix: correct minor typos in code
+
+      see the work item for details on the typos fixed
+
       related work items #12
-    "
+    
     info: This is default info from xconv
     info_path: xconv_info.txt
 
