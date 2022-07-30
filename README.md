@@ -1,4 +1,4 @@
-# XCONV - X Convertional
+# XCONV - X Conventional
 Expired Study Project on [Committizen](https://github.com/commitizen-tools/commitizen)
 ## Requirements
 - [Git] `^2.`+
@@ -18,7 +18,7 @@ xc h
 - output
 ```
 NAME:
-   xc - X Convertional is a cli tool to generate conventional commits and versioning.
+   xc - X Conventional is a cli tool to generate conventional commits and versioning.
 
 USAGE:
    xc [-h] {init,commit,example,info,tag,schema,bump,changelog,version}

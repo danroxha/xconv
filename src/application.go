@@ -27,7 +27,7 @@ func Run() {
 		},
 		Copyright: "(c) 2022 MIT",
 		HelpName:  "contrive",
-		Usage:     "XConvertional is a cli tool to generate conventional commits.",
+		Usage:     "XConventional is a cli tool to generate conventional commits.",
 		UsageText: "xconv [-h] {init,commit,example,info,tag,schema,bump,changelog,version}",
 		ArgsUsage: "[args and such]",
 		HideHelp:  false,
