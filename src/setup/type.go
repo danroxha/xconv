@@ -66,6 +66,7 @@ type Profile struct {
 	Schema          string     `yaml:"schema"`
 	Tag             Tag        `yaml:"tag"`
 	Extends         string     `yaml:"extends"`
+	processed       bool
 }
 
 type Message struct {

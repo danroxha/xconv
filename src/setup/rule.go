@@ -16,13 +16,12 @@ func NewRule() Rule {
 	rule := Rule{}
 	rule.loadRuleFromFile()
 	rule.setDefaultValues()
-	rule.mergeExtendsProfiles()
+	rule.handleProfilePropertyInheritance()
 
 	return rule
 }
 
 func (conf *Rule) loadRuleFromFile() error {
-
 	file := struct {
 		Rule Rule `yaml:"rule"`
 	}{}
@@ -59,14 +58,14 @@ func (rule *Rule) FindCurrentProfileEnable() (Profile, error) {
 	return Profile{}, errors.New("Profile setup not found or disabled")
 }
 
-func (rule *Rule) FindProfileByName(profileName string) (Profile, int, error) {
-	for index, profile := range rule.Profiles {
+func (rule *Rule) FindProfileByName(profileName string) (Profile, error) {
+	for _, profile := range rule.Profiles {
 		if profile.Name == profileName {
-			return profile, index, nil
+			return profile, nil
 		}
 	}
 
-	return Profile{}, -1, errors.New("profile setup not found or disabled")
+	return Profile{}, errors.New("profile setup not found or disabled")
 }
 
 func (rule *Rule) ReplaceProfile(p Profile) error {
@@ -80,58 +79,53 @@ func (rule *Rule) ReplaceProfile(p Profile) error {
 	return errors.New("profile not found")
 }
 
-func (rule *Rule) mergeExtendsProfiles() {
-	for indexA, profileA := range rule.Profiles {
-		for indexB, profileB := range rule.Profiles {
-			if profileA.Name == profileB.Name {
-				continue
-			}
-
-			rule.mergeExtendsRecursive(&profileA, indexA, []string{})
-
-			if profileA.Name == profileB.Extends {
-				mergo.Merge(&profileB, profileA)
-				rule.Profiles[indexB] = profileB
-			}
-		}	
+func (rule *Rule) handleProfilePropertyInheritance() {
+	for _, profile := range rule.Profiles {
+		rule.resolveInheritedProperties(profile, []string{})
 	}
 }
 
-
-func (rule *Rule) mergeExtendsRecursive(profile *Profile, index int, stack []string)  {
-	super, indexOf, err := rule.FindProfileByName(profile.Extends)
+func (rule *Rule) resolveInheritedProperties(profile Profile, stackTrace []string)  {
+	parent, err := rule.FindProfileByName(profile.Extends)
 
 	if err != nil {
+		profile.processed = true
+		rule.ReplaceProfile(profile)
 		return
 	}
 
-	if util.ContainsSlice(stack, super.Name) {
-		stack = append(stack, super.Name)
+	if util.ContainsSlice(stackTrace, parent.Name) {
+		stackTrace = append(stackTrace, parent.Name)
 		exception := ExitCodeStardard["InvalidProfile"]
 		
-		var recursive string = ""
+		dependencyString := buildDependencyStringArrow(stackTrace)
 
-		for index, name := range stack {
-			if index < len(stack) - 1 {
-				recursive += name + " \u2192 "
-			}else {
-				recursive += name
-			}
-		}
-
-
-		fmt.Printf("%s - %s", exception.Description, recursive)
+		fmt.Printf("%s - %s", exception.Description, dependencyString)
 		os.Exit(exception.ExitCode)
 	}
 
-	stack = append(stack, super.Name)
+	stackTrace = append(stackTrace, parent.Name)
 
-	if super.Extends != "" {
-		rule.mergeExtendsRecursive(&super, indexOf, stack)
+	if parent.Extends != "" || !parent.processed {
+		rule.resolveInheritedProperties(parent, stackTrace)
 	}
+	
+	profile.processed = true
 
-	mergo.Merge(profile, super)
-	rule.Profiles[index] = *profile
+	mergo.Merge(&profile, parent)
+	rule.ReplaceProfile(profile)
+}
+
+func buildDependencyStringArrow(stack []string) string {
+	s := ""
+	for index, name := range stack {
+		if index < len(stack)-1 {
+			s += name + " \u2192 "
+		} else {
+			s += name
+		}
+	}
+	return s
 }
 
 func (rule *Rule) setDefaultValues() {
@@ -145,8 +139,8 @@ func (rule *Rule) setDefaultValues() {
 		panic(err)
 	}
 
-	defaultProfile, _,  errDefaultProfile := defaultConfig.Rule.FindProfileByName("xconv_default")
-	extendsDefaultProfile, _, errExtendsDefaultProfile := rule.FindProfileByName("xconv_default")
+	defaultProfile, errDefaultProfile := defaultConfig.Rule.FindProfileByName("xconv_default")
+	extendsDefaultProfile, errExtendsDefaultProfile := rule.FindProfileByName("xconv_default")
 
 	if errDefaultProfile != nil {
 		panic(err)
