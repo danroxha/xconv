@@ -58,14 +58,14 @@ func (rule *Rule) FindCurrentProfileEnable() (Profile, error) {
 	return Profile{}, errors.New("Profile setup not found or disabled")
 }
 
-func (rule *Rule) FindProfileByName(profileName string) (Profile, error) {
+func (rule *Rule) FindProfileByName(profileName string) (Profile, bool) {
 	for _, profile := range rule.Profiles {
 		if profile.Name == profileName {
-			return profile, nil
+			return profile, true
 		}
 	}
 
-	return Profile{}, errors.New("profile setup not found or disabled")
+	return Profile{}, false
 }
 
 func (rule *Rule) ReplaceProfile(p Profile) error {
@@ -86,9 +86,9 @@ func (rule *Rule) handleProfilePropertyInheritance() {
 }
 
 func (rule *Rule) resolveInheritedProperties(profile Profile, stackTrace []string)  {
-	parent, err := rule.FindProfileByName(profile.Extends)
-
-	if err != nil {
+	parent, ok := rule.FindProfileByName(profile.Extends)
+	
+	if !ok {
 		profile.processed = true
 		rule.ReplaceProfile(profile)
 		return
@@ -96,9 +96,9 @@ func (rule *Rule) resolveInheritedProperties(profile Profile, stackTrace []strin
 
 	if util.ContainsSlice(stackTrace, parent.Name) {
 		stackTrace = append(stackTrace, parent.Name)
-		exception := ExitCodeStardard["InvalidProfile"]
-		
 		dependencyString := buildDependencyStringArrow(stackTrace)
+		
+		exception := ExitCodeStardard["InvalidProfile"]
 
 		fmt.Printf("%s - %s", exception.Description, dependencyString)
 		os.Exit(exception.ExitCode)
@@ -106,7 +106,7 @@ func (rule *Rule) resolveInheritedProperties(profile Profile, stackTrace []strin
 
 	stackTrace = append(stackTrace, parent.Name)
 
-	if parent.Extends != "" || !parent.processed {
+	if !parent.processed {
 		rule.resolveInheritedProperties(parent, stackTrace)
 	}
 	
@@ -134,19 +134,17 @@ func (rule *Rule) setDefaultValues() {
 	}{}
 
 	err := yaml.Unmarshal(XCONVFileContent, &defaultConfig)
-
 	if err != nil {
 		panic(err)
 	}
 
-	defaultProfile, errDefaultProfile := defaultConfig.Rule.FindProfileByName("xconv_default")
-	extendsDefaultProfile, errExtendsDefaultProfile := rule.FindProfileByName("xconv_default")
-
-	if errDefaultProfile != nil {
-		panic(err)
+	defaultProfile, ok := defaultConfig.Rule.FindProfileByName("xconv_default")
+	if !ok {
+		panic(errors.New("profile setup not found or disabled"))
 	}
 
-	if errExtendsDefaultProfile != nil {
+	extendsDefaultProfile, ok := rule.FindProfileByName("xconv_default")
+	if !ok {
 		rule.Profiles = append(rule.Profiles, defaultProfile)
 		return
 	}
