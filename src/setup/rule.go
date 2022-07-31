@@ -152,6 +152,5 @@ func (rule *Rule) setDefaultValues() {
 	}
 	
 	mergo.Merge(&extendsDefaultProfile, defaultProfile)
-
 	rule.ReplaceProfile(extendsDefaultProfile)
 }
