@@ -13,7 +13,6 @@ import (
 )
 
 func Commit(c *cli.Context) error {
-
 	if gitscm.IsStageAreaEmpty() {
 		exception := setup.ExitCodeStardard["NothingToCommitError"]
 		fmt.Println(exception.Description)
@@ -28,7 +27,6 @@ func Commit(c *cli.Context) error {
 	profile, profileErr := rule.FindCurrentProfileEnable()
 
 	for _, task := range script.Task {
-
 		if task.Bind == COMMIT && task.Enable {
 			if task.When == setup.BEFORE {
 				task.Run()
@@ -124,13 +122,11 @@ func Commit(c *cli.Context) error {
 
 		} else {
 			for {
-
 				clientInput = parse[input.Type](cmd.ReadInput(input.Message))
 
-				filter, isContaisFilter := script.FindByFilterName(input.Filter)
+				filter, isContainsFilter := script.FindByFilterName(input.Filter)
 
 				for _, middlewareName := range input.Middleware {
-
 					middleware, isContaisMiddleware := script.FindByMiddlewareName(middlewareName)
 
 					if isContaisMiddleware {
@@ -140,10 +136,8 @@ func Commit(c *cli.Context) error {
 					}
 				}
 
-				if isContaisFilter {
-
+				if isContainsFilter {
 					if filter.Enable {
-
 						if !filter.Run(clientInput) {
 							break
 						} else {
@@ -198,7 +192,6 @@ func Commit(c *cli.Context) error {
 }
 
 func optionDescription(optionGroup []setup.Option) []string {
-
 	names := []string{}
 
 	for _, option := range optionGroup {

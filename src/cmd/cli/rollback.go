@@ -11,7 +11,6 @@ import (
 )
 
 func Rollback(c *cli.Context) error {
-
 	script := setup.NewScript()
 
 	for _, task := range script.Task {
@@ -24,7 +23,6 @@ func Rollback(c *cli.Context) error {
 			}
 		}
 	}
-
 
 	git, err := gitscm.New()
 

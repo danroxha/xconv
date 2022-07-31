@@ -14,7 +14,6 @@ func New(Version string) SemVer {
 }
 
 func (sem SemVer) FindVersion() (Version, error) {
-
 	if !sem.IsVersionValid() {
 		return Version{}, errors.New("semantic version is invalid")
 	}

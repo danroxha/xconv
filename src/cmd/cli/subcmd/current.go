@@ -9,7 +9,6 @@ import (
 )
 
 func TagCurrent(c *cli.Context) error {
-
 	git, err := gitscm.New()
 
 	if err != nil {
@@ -22,7 +21,6 @@ func TagCurrent(c *cli.Context) error {
 	}
 
 	tag := git.GitTags[0]
-
 
 	if strings.Contains(c.String("format"), `%V`) {
 		fmt.Printf("%v\n", tag.Annotation)

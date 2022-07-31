@@ -8,7 +8,6 @@ import (
 )
 
 func Example(c *cli.Context) error {
-
 	script := setup.NewScript()
 
 	for _, task := range script.Task {

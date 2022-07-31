@@ -8,7 +8,6 @@ import (
 )
 
 func Schema(c *cli.Context) error {
-
 	script := setup.NewScript()
 
 	fmt.Println(setup.XCONVFileContent)

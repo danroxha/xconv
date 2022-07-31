@@ -15,7 +15,6 @@ const (
 )
 
 func (version *Version) IncrementVersion(level string, mode string) {
-
 	increment := map[string]func(Version) Version {
 		"MAJOR": func(v Version) Version {
 			return Version {

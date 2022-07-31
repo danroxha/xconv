@@ -50,7 +50,6 @@ func (conf *Rule) loadRuleFromFile() error {
 }
 
 func (rule *Rule) FindCurrentProfileEnable() (Profile, error) {
-
 	for _, profile := range rule.Profiles {
 		if profile.Name == rule.ActiveProfile {
 			return profile, nil
@@ -136,7 +135,6 @@ func (rule *Rule) mergeExtendsRecursive(profile *Profile, index int, stack []str
 }
 
 func (rule *Rule) setDefaultValues() {
-	
 	defaultConfig := struct {
 		Rule Rule `yaml:"rule"`
 	}{}
@@ -162,5 +160,4 @@ func (rule *Rule) setDefaultValues() {
 	mergo.Merge(&extendsDefaultProfile, defaultProfile)
 
 	rule.ReplaceProfile(extendsDefaultProfile)
-
 }

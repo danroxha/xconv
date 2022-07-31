@@ -177,8 +177,8 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 	},
 
 	"NoneIncrementExit": {
-		Exception: "InvalidConfigurationError",
-		ExitCode:  21,
+		Exception:   "InvalidConfigurationError",
+		ExitCode:    21,
 		Description: "the commits found are not elegible to be bumped",
 	},
 
@@ -188,8 +188,8 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 		Description: "an error was found in the script",
 	},
 	"InvalidProfile": {
-		Exception: "InvalidProfile",
-		ExitCode: 23,
+		Exception:   "InvalidProfile",
+		ExitCode:    23,
 		Description: "profiles have recursive inheritance",
 	},
 }

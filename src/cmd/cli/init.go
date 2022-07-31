@@ -14,7 +14,6 @@ import (
 )
 
 func Init(c *cli.Context) error {
-
 	script := setup.NewScript()
 
 	for _, task := range script.Task {
@@ -115,5 +114,4 @@ func createInitialVersion() {
 
 	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annotation, time.Now())))
 	gitscm.CreateTagFrom(annotation, selected.Hash, fmt.Sprintf("%x", hash))
-
 }

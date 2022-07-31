@@ -15,7 +15,6 @@ import (
 )
 
 func Bump(c *cli.Context) error {
-
 	script := setup.NewScript()
 
 	for _, task := range script.Task {
@@ -61,7 +60,6 @@ func Bump(c *cli.Context) error {
 }
 
 func incrementVersion(tag gitscm.GitTag) semver.Version {
-
 	rule := setup.NewRule()
 	profile, errProfile := rule.FindCurrentProfileEnable()
 

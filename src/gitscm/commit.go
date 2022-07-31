@@ -24,7 +24,6 @@ func LoadCommitFromBegin() ([]GitCommit, error) {
 	if err != nil {
 		return []GitCommit{}, err
 	}
-
 	
 	initialCommit := strings.TrimSpace(string(output))
 	hashList, err := loadCommitsBetween(initialCommit, "HEAD")
@@ -50,7 +49,6 @@ func LoadCommitFromBegin() ([]GitCommit, error) {
 }
 
 func LoadCommitsFrom(beginFromCommit string) ([]GitCommit, error) {
-	
 	hashList, err := loadCommitsBetween(beginFromCommit, "HEAD")
 
 	if err != nil {
@@ -84,6 +82,7 @@ func loadCommitsBetween(start string, end string) ([]string, error) {
 			fmt.Sprintf(`%v..%v`, start, end),
 		},
 	}
+	
 	output, err := log.Execute()
 
 	if err != nil {
@@ -136,7 +135,6 @@ func findAuthorFromCommit(hash string) string {
 }
 
 func findMessageFromCommit(hash string) string {
-
 	show := cmd.InternalCommand{
 		Application: "git",
 		Args: []string{
@@ -158,7 +156,6 @@ func findMessageFromCommit(hash string) string {
 }
 
 func findShortMessageFromCommit(hash string) string {
-
 	show := cmd.InternalCommand{
 		Application: "git",
 		Args: []string{

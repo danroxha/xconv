@@ -62,7 +62,6 @@ func New() (Git, error) {
 }
 
 func (git *Git) loadGitTags() error {
-
 	tags, ok := findTagList()
 
 	if !ok {
@@ -82,17 +81,14 @@ func (git *Git) loadGitTags() error {
 }
 
 func (git *Git) LastestTag() (GitTag, bool) {
-
 	if git.IsTagsEmpty() {
 		return GitTag{}, false
 	}
 
 	return git.GitTags[0], true
-
 }
 
 func FormatCommit(messages map[string]string) (string, error) {
-
 	rule := setup.NewRule()
 	profile, profileErr := rule.FindCurrentProfileEnable()
 
@@ -219,7 +215,6 @@ func findTagList() ([]string, bool) {
 
 // https://play.golang.com/p/11oot1NWTPd
 func parseTag(commit string) GitTag {
-
 	tag := make(map[string]string)
 
 	regexGroup := map[string]func(string) string{

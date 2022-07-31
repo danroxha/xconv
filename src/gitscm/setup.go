@@ -26,7 +26,6 @@ func IsGitInstalled() bool {
 	_, err := binaryGit.Execute()
 
 	return err == nil
-
 }
 
 func IsStageAreaEmpty() bool {

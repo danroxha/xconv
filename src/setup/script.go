@@ -119,7 +119,6 @@ func (middleware Middleware) Run(args ...string) string {
 }
 
 func (filter Filter) Run(args ...string) bool {
-
 	L := lua.NewState()
 	defer L.Close()
 
@@ -163,7 +162,6 @@ func (filter Filter) Run(args ...string) bool {
 }
 
 func (task Task) Run(args ...string) {
-
 	if task.Language == SH {
 
 		var binarySh string
@@ -256,5 +254,4 @@ func (sc *Script) setDefaultScripts() {
 	sc.Filter = append(sc.Filter, defaultScript.Script.Filter...)
 	sc.Middleware = append(sc.Middleware, defaultScript.Script.Middleware...)
 	sc.Task = append(sc.Task, defaultScript.Script.Task...)	
-
 }
