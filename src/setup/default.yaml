@@ -182,11 +182,11 @@ script:
         end
 
   tasks:
-  - name: push current tag
-    enable: true
-    language: sh
-    bind: bump
-    when: after
-    script: |
-      CURRENT_TAG=$(xc tag current --format=%V)
-      git push origin $CURRENT_TAG
+    - name: push current tag
+      enable: true
+      language: sh
+      bind: bump
+      when: after
+      script: |
+        CURRENT_TAG=$(xc tag current --format=%V)
+        git push origin $CURRENT_TAG
