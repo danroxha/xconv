@@ -8,3 +8,17 @@ rule:
     tag:
       mode: alpha # alpha beta | default: standard
       format: v$version # v$major.$minor.$patch$"
+
+    message_template: | 
+      {{prefix}}({{scope}}): {{subject}}
+      
+      {% if body != '' %}
+      {{body}}
+      {% endif %}
+
+      {% if is_breaking_change %}
+      BREAKING CHANGE: 
+      {% endif %}
+      {% if footer != '' %}
+      issue: {{footer}}
+      {% endif %}
