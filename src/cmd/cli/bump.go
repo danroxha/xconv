@@ -51,10 +51,11 @@ func Bump(c *cli.Context) error {
 	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annonation, time.Now())))
 
 	ok, err = gitscm.CreateTag(annonation, fmt.Sprintf("%x", hash))
-
 	if !ok || err != nil {
-		return nil
+		panic(err)
 	}
+
+	fmt.Printf("bump: version %s \u2192 %s\n", lastestTag.Annotation, annonation)
 
 	return nil
 }
@@ -68,6 +69,7 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 	}
 
 	commits, errCommit := gitscm.LoadCommitsFrom(tag.Commit.Hash)
+	commits = commits[1:]
 
 	if errCommit != nil {
 		panic(errCommit.Error())
