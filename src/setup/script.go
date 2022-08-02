@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/dannrocha/xconv/src/cmd"
+	"github.com/dannrocha/xconv/src/util"
 	lua "github.com/yuin/gopher-lua"
 	"gopkg.in/yaml.v3"
 )
@@ -17,6 +18,7 @@ func NewScript() Script {
 
 	script.loadScriptFromFile()
 	script.setDefaultScripts()
+	script.removeIgnoredScripts()
 
 	return script
 }
@@ -254,4 +256,26 @@ func (sc *Script) setDefaultScripts() {
 	sc.Filter = append(sc.Filter, defaultScript.Script.Filter...)
 	sc.Middleware = append(sc.Middleware, defaultScript.Script.Middleware...)
 	sc.Task = append(sc.Task, defaultScript.Script.Task...)	
+}
+
+func (sc *Script) removeIgnoredScripts() {
+	for _, name := range sc.Ignore {		
+		for i, filter := range sc.Filter {
+			if name == filter.Name {
+				sc.Filter = util.RemoveIndex(sc.Filter, i)
+			}
+		}
+
+		for i, middleware := range sc.Middleware {
+			if name == middleware.Name {
+				sc.Middleware = util.RemoveIndex(sc.Middleware, i)
+			}
+		}
+
+		for i, task := range sc.Task {
+			if name == task.Name {
+				sc.Task = util.RemoveIndex(sc.Task, i)
+			}
+		}
+	}
 }

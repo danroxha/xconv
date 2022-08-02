@@ -1,12 +1,23 @@
 package util
 
 func RemoveContains[T comparable](l []T, item T) []T {
-	for i, other := range l {
+	if len(l) == 0 {
+		return l
+	}
+
+	for index, other := range l {
 		if other == item {
-			return append(l[:i], l[i+1:]...)
+			return append(l[:index], l[index+1:]...)
 		}
 	}
 	return l
+}
+
+func RemoveIndex[T comparable](s []T, index int) []T {
+	if len(s) == 0 {
+		return s
+	}
+	return append(s[:index], s[index+1:]...)
 }
 
 func ContainsSlice[T comparable](slice []T, item T) bool {

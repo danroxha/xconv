@@ -99,6 +99,7 @@ type Middleware struct {
 }
 
 type Script struct {
+	Ignore     []string     `yaml:"ignore"`
 	Filter     []Filter     `yaml:"filters"`
 	Middleware []Middleware `yaml:"middlewares"`
 	Task       []Task       `yaml:"tasks"`
