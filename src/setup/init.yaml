@@ -1,0 +1,20 @@
+rule:
+  changelog_file: CHANGELOG.md
+  active_profile: your profile
+
+  profiles:
+  - name: your profile
+    extends: xconv_default
+    tag:
+      mode: standard
+      format: v$version
+
+script:
+  tasks:
+    - name: example script
+      enable: true
+      language: sh
+      bind: example
+      when: before
+      script: |
+        echo Hello World

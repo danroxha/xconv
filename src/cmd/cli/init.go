@@ -70,7 +70,7 @@ func createSetupFile() {
 
 	defer file.Close()
 
-	file.Write([]byte(setup.XCONVFileContent))
+	file.Write([]byte(setup.XCONVInitialtContent))
 }
 
 func createInitialVersion() {
