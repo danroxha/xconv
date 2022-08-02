@@ -8,7 +8,7 @@ import (
 )
 
 func Schema(c *cli.Context) error {
-	script := setup.NewScript(
+	script := setup.NewScript()
 	
 	for _, task := range script.Task {
 		if task.Bind == SCHEMA && task.Enable {
