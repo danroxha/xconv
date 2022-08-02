@@ -26,11 +26,32 @@ func Init(c *cli.Context) error {
 		}
 	}
 
+	git, err := gitscm.New()
+
+	if err != nil {
+		panic(err)
+	}
+
+	if len(git.GitTags) == 0 && setupFileExists()  {
+		createInitialVersion()
+		return nil
+	}
+
 	checkSetupExist()
 	createInitialVersion()
 	createSetupFile()
 
 	return nil
+}
+
+func setupFileExists() bool {
+	file, err := os.Open(setup.Filename)
+	if err != nil {
+		return false
+	}
+
+	file.Close()
+	return true
 }
 
 func formatAnnotation(annotation string) string {
@@ -46,6 +67,7 @@ func formatAnnotation(annotation string) string {
 
 	return newVersion.ConvertToSemver().Version
 }
+
 
 func checkSetupExist() {
 	file, err := os.Open(setup.Filename)
