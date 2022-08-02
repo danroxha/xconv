@@ -60,7 +60,7 @@ func checkSetupExist() {
 }
 
 func createSetupFile() {
-	file, err := os.Create(".xconv-test.yaml")
+	file, err := os.Create(setup.Filename)
 
 	if err != nil {
 		throw := setup.ExitCodeStardard["NoPermissionOnDir"]
@@ -78,7 +78,9 @@ func createInitialVersion() {
 	commits, err := gitscm.LoadCommitFromBegin()
 
 	if err != nil {
-		panic(err)
+		exception := setup.ExitCodeStardard["NoCommitsFoundError"]
+		fmt.Println("there are no commits for versioning")
+		os.Exit(exception.ExitCode)
 	}
 
 	for _, commit := range commits {

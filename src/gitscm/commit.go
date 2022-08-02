@@ -89,7 +89,10 @@ func loadCommitsBetween(start string, end string) ([]string, error) {
 		return []string{}, err
 	}
 
-	return util.RemoveContains(strings.Split(string(output), "\n"), ""), nil
+	commits := util.RemoveContains(strings.Split(string(output), "\n"), "")
+	commits = append([]string{start}, commits...)
+
+	return commits, nil
 }
 
 func findDateFromCommit(hash string) string {
