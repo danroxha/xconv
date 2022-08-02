@@ -10,6 +10,8 @@ rule:
       format: v$version
 
 script:
+  ignore:
+    - push current tag
   tasks:
     - name: example script
       enable: true
