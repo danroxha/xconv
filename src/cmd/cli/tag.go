@@ -30,7 +30,7 @@ func Tag(c *cli.Context) error {
 	}
 
 	if git.IsTagsEmpty() {
-		fmt.Println("There are no tag in this repository")
+		fmt.Println("there are no tags in this repository")
 		return nil
 	}
 
