@@ -2,6 +2,7 @@ package semver
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -61,12 +62,13 @@ func (version Version) ConvertToSemver() SemVer {
 		"$version": fmt.Sprintf("%v.%v.%v", version.Major, version.Minor, version.Path),
 	}
 
-	profile, errProfile := rule.FindCurrentProfileEnable()
-
-	if errProfile != nil {
-		panic(errProfile)
+	profile, err := rule.FindCurrentProfileEnable()
+	if err != nil {
+		exception := setup.ExitCodeStardard["ActiveProfileNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
 	}
-
+	
 	format := profile.Tag.Format
 
 	for match, content := range envs {

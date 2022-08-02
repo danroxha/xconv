@@ -62,10 +62,12 @@ func Bump(c *cli.Context) error {
 
 func incrementVersion(tag gitscm.GitTag) semver.Version {
 	rule := setup.NewRule()
-	profile, errProfile := rule.FindCurrentProfileEnable()
+	profile, err := rule.FindCurrentProfileEnable()
 
-	if errProfile != nil {
-		panic(errProfile)
+	if err != nil {
+		exception := setup.ExitCodeStardard["ActiveProfileNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
 	}
 
 	commits, errCommit := gitscm.LoadCommitsFrom(tag.Commit.Hash)

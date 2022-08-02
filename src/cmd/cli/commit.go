@@ -24,7 +24,13 @@ func Commit(c *cli.Context) error {
 	rule := setup.NewRule()
 	script := setup.NewScript()
 
-	profile, profileErr := rule.FindCurrentProfileEnable()
+	profile, err := rule.FindCurrentProfileEnable()
+
+	if err != nil {
+		exception := setup.ExitCodeStardard["ActiveProfileNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
+	}
 
 	for _, task := range script.Task {
 		if task.Bind == COMMIT && task.Enable {
@@ -36,7 +42,7 @@ func Commit(c *cli.Context) error {
 		}
 	}
 
-	if profileErr != nil {
+	if err != nil {
 		return nil
 	}
 

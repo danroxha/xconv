@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/dannrocha/xconv/src/setup"
 	"github.com/urfave/cli/v2"
@@ -22,10 +23,12 @@ func Example(c *cli.Context) error {
 
 	rule := setup.NewRule()
 
-	profile, errProf := rule.FindCurrentProfileEnable()
+	profile, err := rule.FindCurrentProfileEnable()
 
-	if errProf != nil {
-		panic(errProf)
+	if err != nil {
+		exception := setup.ExitCodeStardard["ActiveProfileNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
 	}
 
 	fmt.Println(profile.Example)

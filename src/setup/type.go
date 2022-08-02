@@ -194,4 +194,9 @@ var ExitCodeStardard map[string]ExitCode = map[string]ExitCode{
 		ExitCode:    23,
 		Description: "profiles have recursive inheritance",
 	},
+	"ActiveProfileNotFound": {
+		Exception:   "ActiveProfileNotFound",
+		ExitCode:    24,
+		Description: "active profiles not found in .xconv.yaml",
+	},
 }

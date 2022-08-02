@@ -90,12 +90,12 @@ func (git *Git) LastestTag() (GitTag, bool) {
 
 func FormatCommit(messages map[string]string) (string, error) {
 	rule := setup.NewRule()
-	profile, profileErr := rule.FindCurrentProfileEnable()
+	profile, err := rule.FindCurrentProfileEnable()
 
-	if profileErr != nil {
-		// exitStd := setupExitCodeStardard["InvalidConfigurationError"]
-		// cli.Exit(exitStd.Description, exitStd.ExitCode)
-		os.Exit(1)
+	if err != nil {
+		exception := setup.ExitCodeStardard["ActiveProfileNotFound"]
+		fmt.Println(exception.Description)
+		os.Exit(exception.ExitCode)
 	}
 
 	parse, err := pongo2.FromString(profile.MessageTemplate)
