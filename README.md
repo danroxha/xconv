@@ -308,6 +308,7 @@ rule:
       {% if footer != '' %}
       issue: {{footer}}
       {% endif %}
+
 script:
   tasks:
     - name: log bump
@@ -325,6 +326,31 @@ script:
         fi
         
         echo $CURRENT_TAG >> log-version.txt
+
+    - name: remote script
+      enable: true
+      language: sh
+      bind: example
+      when: after
+      script: |
+        TMP=".xconv/tmp"
+
+        if [ -e $TMP/lazy.sh ]
+        then
+          ./$TMP/lazy.sh --version
+          exit
+        fi
+
+        mkdir -p $TMP
+        wget https://raw.githubusercontent.com/dannRocha/lazy/master/lazy.sh -qO $TMP/lazy.sh
+        
+        chmod +x $TMP/lazy.sh
+
+        echo "-- Remote script:"
+        ./$TMP/lazy.sh --version
+
+        # remove this command to enable 'cache'
+        rm -fr .xconv
 ```
 
 
