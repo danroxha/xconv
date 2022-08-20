@@ -6,6 +6,7 @@ rule:
   - name: xconv_default
     extends: nil
     tag:
+      restricted: true
       mode: standard
       format: v$version
       
