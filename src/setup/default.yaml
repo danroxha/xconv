@@ -149,7 +149,7 @@ rule:
         default: false
 
       - type: input
-        message: "Related work items (PBI, Task IDs, Issue): (press [enter] to skip)"
+        message: "Related work items (PBI, Task IDs, Issue): (press [enter] to skip): "
         name: footer
         middleware:
         - to lower case
