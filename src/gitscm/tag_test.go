@@ -106,3 +106,22 @@ func TestGivenATagCommitShowDetailsWithAuthorsNotTheSameThenShouldToConvertToGit
 		t.Errorf("Fail")
 	}
 }
+
+func BenchmarkParseTag(b *testing.B) {
+	commit := `
+		tag v0.1.1
+		Tagger: Daniel Rocha <rochadaniel@acad.ifma.edu.br>
+		Date:   Mon Jul 4 18:27:27 2022 -0300
+
+
+		commit 4fed22f43ea4c6eb9cc875fcb30bc68582ad9610
+		Author: Daniel Rocha <rochadaniel@acad.ifma.edu.br>
+		Date:   Mon Jul 4 18:26:02 2022 -0300
+
+			chore(.xconv.yaml): new attributes added
+
+			BREAKING CHANGE:
+	`
+
+	parseTag(commit)
+}

@@ -142,3 +142,13 @@ func TestGivenThreeReasonsToUpgradeTheVersionThenItShouldIncrementCorrectlyOnBet
 		t.Fail()
 	}
 }
+
+func BenchmarkIcrementVersion(b *testing.B) {
+	version := Version{
+		Major: 0,
+		Minor: 0,
+		Path:  0,
+	}
+
+	version.IncrementVersion("major", BETA)
+}

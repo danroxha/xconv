@@ -21,32 +21,6 @@ func NewRule() Rule {
 	return rule
 }
 
-func (conf *Rule) loadRuleFromFile() error {
-	file := struct {
-		Rule Rule `yaml:"rule"`
-	}{}
-
-	blob, err := ioutil.ReadFile(Filename)
-
-	if err != nil {
-		blob = XCONVFileContent
-	}
-
-	parseError := yaml.Unmarshal(blob, &file)
-
-	if parseError != nil {
-		fmt.Println(parseError.Error())
-	}
-
-	*conf = file.Rule
-
-	if conf.Version == "" {
-		exitStd := ExitCodeStardard["NoVersionSpecifiedError"]
-		return errors.New(exitStd.Description)
-	}
-
-	return nil
-}
 
 func (rule *Rule) FindCurrentProfileEnable() (Profile, error) {
 	for _, profile := range rule.Profiles {
@@ -78,6 +52,34 @@ func (rule *Rule) ReplaceProfile(p Profile) error {
 
 	return errors.New("profile not found")
 }
+
+func (conf *Rule) loadRuleFromFile() error {
+	file := struct {
+		Rule Rule `yaml:"rule"`
+	}{}
+
+	blob, err := ioutil.ReadFile(Filename)
+
+	if err != nil {
+		blob = XCONVFileContent
+	}
+
+	parseError := yaml.Unmarshal(blob, &file)
+
+	if parseError != nil {
+		fmt.Println(parseError.Error())
+	}
+
+	*conf = file.Rule
+
+	if conf.Version == "" {
+		exitStd := ExitCodeStardard["NoVersionSpecifiedError"]
+		return errors.New(exitStd.Description)
+	}
+
+	return nil
+}
+
 
 func (rule *Rule) handleProfilePropertyInheritance() {
 	for _, profile := range rule.Profiles {
@@ -116,18 +118,6 @@ func (rule *Rule) resolveInheritedProperties(profile Profile, stackTrace []strin
 	rule.ReplaceProfile(profile)
 }
 
-func buildDependencyStringArrow(stack []string) string {
-	s := ""
-	for index, name := range stack {
-		if index < len(stack)-1 {
-			s += name + " \u2192 "
-		} else {
-			s += name
-		}
-	}
-	return s
-}
-
 func (rule *Rule) setDefaultValues() {
 	defaultConfig := struct {
 		Rule Rule `yaml:"rule"`
@@ -152,3 +142,16 @@ func (rule *Rule) setDefaultValues() {
 	mergo.Merge(&extendsDefaultProfile, defaultProfile)
 	rule.ReplaceProfile(extendsDefaultProfile)
 }
+
+func buildDependencyStringArrow(stack []string) string {
+	s := ""
+	for index, name := range stack {
+		if index < len(stack)-1 {
+			s += name + " \u2192 "
+		} else {
+			s += name
+		}
+	}
+	return s
+}
+
