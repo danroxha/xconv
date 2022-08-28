@@ -2,3 +2,5 @@
 .idea
 vendor/
 .vscode/
+
+version.txt
