@@ -1,10 +1,8 @@
 package cli
 
 import (
-	"crypto/md5"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/dannrocha/xconv/src/gitscm"
 	"github.com/dannrocha/xconv/src/semver"
@@ -136,6 +134,14 @@ func createInitialVersion() {
 	
 	annotation = formatAnnotation(annotation)
 
-	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annotation, time.Now())))
-	gitscm.CreateTagFrom(annotation, selected.Hash, fmt.Sprintf("%x", hash))
+	rule := setup.NewRule()
+
+	profile, err := rule.FindCurrentProfileEnable()
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	gitscm.CreateTagFrom(annotation, selected.Hash, fmt.Sprintf("stamp: '%s'", profile.Tag.Stamp))
 }

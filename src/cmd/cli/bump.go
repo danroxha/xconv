@@ -35,6 +35,7 @@ func Bump(c *cli.Context) error {
 	lastestTag, ok := git.LastestTag()
 
 	if !ok {
+		Init(c)
 		return nil
 	}
 

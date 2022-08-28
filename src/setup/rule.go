@@ -1,6 +1,7 @@
 package setup
 
 import (
+	"crypto/md5"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -17,6 +18,7 @@ func NewRule() Rule {
 	rule.loadRuleFromFile()
 	rule.setDefaultValues()
 	rule.handleProfilePropertyInheritance()
+	rule.parseStampProfiles()
 
 	return rule
 }
@@ -141,6 +143,15 @@ func (rule *Rule) setDefaultValues() {
 	
 	mergo.Merge(&extendsDefaultProfile, defaultProfile)
 	rule.ReplaceProfile(extendsDefaultProfile)
+}
+
+func (rule *Rule) parseStampProfiles() {
+
+	for _, profile := range rule.Profiles {
+		stamp := md5.Sum([]byte(fmt.Sprintf("%v", profile.Tag.Stamp)))
+		profile.Tag.Stamp = fmt.Sprintf("%x", stamp)
+		rule.ReplaceProfile(profile)
+	}
 }
 
 func buildDependencyStringArrow(stack []string) string {

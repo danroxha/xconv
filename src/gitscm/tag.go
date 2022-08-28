@@ -1,7 +1,6 @@
 package gitscm
 
 import (
-	"crypto/md5"
 	"errors"
 	"fmt"
 	"os"
@@ -67,11 +66,10 @@ func New() (Git, error) {
 		return Git{}, err
 	}
 
-	stamp := fmt.Sprintf("%x", md5.Sum([]byte(profile.Tag.Stamp)))
 	trackingTags := []GitTag{}
 
 	for _, tag := range git.GitTags {
-		if stamp == tag.Stamp {
+		if profile.Tag.Stamp == tag.Stamp {
 			trackingTags = append(trackingTags, tag)
 		}
 	}
@@ -168,7 +166,7 @@ func gitTagDetails(annotation string) GitTag {
 }
 
 func (git Git) IsTagsEmpty() bool {
-	return len(git.Tags) == 0
+	return len(git.GitTags) == 0
 }
 
 func CreateTag(annonation string, message string) (bool, error) {
