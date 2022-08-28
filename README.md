@@ -292,6 +292,7 @@ rule:
   - name: alpha profile
     extends: xconv_default
     tag:
+      stamp: xconv
       mode: alpha # alpha beta | default: standard
       format: v$version # v$major.$minor.$patch$"
 
@@ -387,7 +388,7 @@ script:
    - <span id="tag">Tag</span>
       | Variable | Type | Default | implemented | Description |
       |-|-|-|-|-|
-      | restricted | string | true | :x: | |
+      | stamp | string | xconv | :heavy_check_mark: | |
       | mode | string | standard | :heavy_check_mark: | |
       | format | object | v$version | :heavy_check_mark: | |
 
