@@ -184,7 +184,7 @@ script:
 
   tasks:
     - name: push current tag
-      enable: true
+      enable: false
       language: sh
       bind: bump
       when: after
