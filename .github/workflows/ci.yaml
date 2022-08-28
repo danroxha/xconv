@@ -85,4 +85,4 @@ jobs:
       name: Upload binary ${{ runner.os }}
       with:
         name: xc-${{ runner.os }}
-        path: ./xconv*
+        path: ./xc*
