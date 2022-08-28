@@ -46,6 +46,7 @@ type Rule struct {
 }
 
 type Tag struct {
+	Stamp  string `yaml:"stamp"`
 	Format string `yaml:"format"`
 	Mode   string `yaml:"mode"`
 }

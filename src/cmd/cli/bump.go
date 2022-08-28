@@ -6,7 +6,6 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	"time"
 
 	"github.com/dannrocha/xconv/src/gitscm"
 	"github.com/dannrocha/xconv/src/semver"
@@ -48,9 +47,9 @@ func Bump(c *cli.Context) error {
 		return nil
 	}
 
-	hash := md5.Sum([]byte(fmt.Sprintf("%v-%v", annonation, time.Now())))
+	hash := md5.Sum([]byte(fmt.Sprintf("%v", "xconv")))
 
-	ok, err = gitscm.CreateTag(annonation, fmt.Sprintf("%x", hash))
+	ok, err = gitscm.CreateTag(annonation, fmt.Sprintf("stamp: '%x'", hash))
 	if !ok || err != nil {
 		panic(err)
 	}
@@ -105,10 +104,11 @@ func incrementVersion(tag gitscm.GitTag) semver.Version {
 					newVersion.IncrementVersion(pattern, profile.Tag.Mode)
 				}
 
-				break
-			} else if strings.Contains(commit.Message, context) {
+				continue
+			} 
+			
+			if strings.Contains(commit.Message, context) {
 				newVersion.IncrementVersion(pattern, profile.Tag.Mode)
-				break
 			}
 		}
 	}

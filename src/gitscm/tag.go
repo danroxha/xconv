@@ -1,6 +1,7 @@
 package gitscm
 
 import (
+	"crypto/md5"
 	"errors"
 	"fmt"
 	"os"
@@ -57,6 +58,25 @@ func New() (Git, error) {
 	if err != nil {
 		return Git{}, err
 	}
+
+	rule := setup.NewRule()
+
+	profile, err := rule.FindCurrentProfileEnable()
+	
+	if err != nil {
+		return Git{}, err
+	}
+
+	stamp := fmt.Sprintf("%x", md5.Sum([]byte(profile.Tag.Stamp)))
+	trackingTags := []GitTag{}
+
+	for _, tag := range git.GitTags {
+		if stamp == tag.Stamp {
+			trackingTags = append(trackingTags, tag)
+		}
+	}
+
+	git.GitTags = trackingTags
 
 	return git, nil
 }
@@ -247,6 +267,16 @@ func parseTag(commit string) GitTag {
 			regex := regexp.MustCompile(`tag\s+(.+)`)
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
+		"stamp": func(content string) string {
+			regex := regexp.MustCompile(`stamp:\s+'(\w+)'`)
+			match := regex.FindStringSubmatch(content)
+
+			if len(match) == 0 {
+				return ""
+			}
+
+			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
+		},
 	}
 
 	for key, regex := range regexGroup {
@@ -257,6 +287,7 @@ func parseTag(commit string) GitTag {
 		Author:     tag["tagger"],
 		Annotation: tag["annonation"],
 		Date:       tag["datetag"],
+		Stamp:      tag["stamp"],
 		Commit: GitCommit{
 			Author: tag["author"],
 			Hash:   tag["hash"],
