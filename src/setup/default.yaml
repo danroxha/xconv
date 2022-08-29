@@ -50,7 +50,7 @@ rule:
       <footer>
     
     example: |
-      bugfix: correct minor typos in code
+      bugfix(context change): correct minor typos in code
 
       see the work item for details on the typos fixed
 
