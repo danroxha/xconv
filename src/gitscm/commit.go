@@ -4,12 +4,21 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/dannrocha/xconv/src/cmd"
 	"github.com/dannrocha/xconv/src/util"
 )
 
+var wg sync.WaitGroup
+var load sync.WaitGroup
+var amount int64
+
 func LoadCommitFromBegin() ([]GitCommit, error) {
+
+	amount = 0
+
 	rev := cmd.InternalCommand{
 		Application: "git",
 		Args: []string{
@@ -32,21 +41,57 @@ func LoadCommitFromBegin() ([]GitCommit, error) {
 	if err != nil {
 		return []GitCommit{}, err
 	}
-	
+
 	gitCommitGroup := []GitCommit{}
+	shared := make(chan string)
+	parse := make(chan GitCommit)
+	MAX_GO_ROUTINE := 320
+	wg.Add(1)
+	load.Add(MAX_GO_ROUTINE)
+	
+	for i := 0; i < MAX_GO_ROUTINE; i++ {
+		go loadCommit(shared, parse)
+	}
+
+	go func(parse chan GitCommit) {
+		defer wg.Done()
+		for  {
+			commit, ok := <- parse
+			atomic.AddInt64(&amount, 1)
+			if !ok || atomic.LoadInt64(&amount) == int64(len(hashList)) {	
+				break
+			}
+			gitCommitGroup = append(gitCommitGroup, commit)
+		}
+	}(parse)
 
 	for _, hash := range hashList {
+		shared <- hash
+	}
+
+	close(shared)
+	
+	wg.Wait()
+
+	return gitCommitGroup, nil
+}
+
+func loadCommit(channel chan string, parse chan<- GitCommit) {
+
+	for {
+		hash, ok := <-channel
+		if !ok {
+			break
+		}
+
 		commit := GitCommit{
 			Message: findShortMessageFromCommit(hash),
 			Hash:    hash,
 			Date:    findDateFromCommit(hash),
 			Author:  findAuthorFromCommit(hash),
 		}
-
-		gitCommitGroup = append(gitCommitGroup, commit)
+		parse <- commit
 	}
-
-	return gitCommitGroup, nil
 }
 
 func LoadCommitsFrom(beginFromCommit string) ([]GitCommit, error) {
