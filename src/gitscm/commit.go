@@ -16,6 +16,7 @@ func LoadCommitFromBegin() ([]GitCommit, error) {
 			"rev-list",
 			"--max-parents=0",
 			"HEAD",
+			"-1",
 		},
 	}
 
@@ -24,27 +25,27 @@ func LoadCommitFromBegin() ([]GitCommit, error) {
 	if err != nil {
 		return []GitCommit{}, err
 	}
-	
+
 	initialCommit := strings.TrimSpace(string(output))
 	hashList, err := loadCommitsBetween(initialCommit, "HEAD")
 
 	if err != nil {
 		return []GitCommit{}, err
 	}
-
+	
 	gitCommitGroup := []GitCommit{}
 
 	for _, hash := range hashList {
 		commit := GitCommit{
 			Message: findShortMessageFromCommit(hash),
-			Hash: hash,
-			Date: findDateFromCommit(hash),
-			Author: findAuthorFromCommit(hash),
+			Hash:    hash,
+			Date:    findDateFromCommit(hash),
+			Author:  findAuthorFromCommit(hash),
 		}
 
 		gitCommitGroup = append(gitCommitGroup, commit)
 	}
-	
+
 	return gitCommitGroup, nil
 }
 
@@ -60,14 +61,14 @@ func LoadCommitsFrom(beginFromCommit string) ([]GitCommit, error) {
 	for _, hash := range hashList {
 		commit := GitCommit{
 			Message: findMessageFromCommit(hash),
-			Hash: hash,
-			Date: findDateFromCommit(hash),
-			Author: findAuthorFromCommit(hash),
+			Hash:    hash,
+			Date:    findDateFromCommit(hash),
+			Author:  findAuthorFromCommit(hash),
 		}
 
 		gitCommitGroup = append(gitCommitGroup, commit)
 	}
-	
+
 	return gitCommitGroup, nil
 }
 
@@ -82,7 +83,7 @@ func loadCommitsBetween(start string, end string) ([]string, error) {
 			fmt.Sprintf(`%v..%v`, start, end),
 		},
 	}
-	
+
 	output, err := log.Execute()
 
 	if err != nil {
@@ -112,7 +113,7 @@ func findDateFromCommit(hash string) string {
 		panic(err)
 	}
 
-	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`) 
+	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`)
 	return regx.ReplaceAllString(string(output), "")
 }
 
@@ -133,7 +134,7 @@ func findAuthorFromCommit(hash string) string {
 		panic(err)
 	}
 
-	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`) 
+	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`)
 	return regx.ReplaceAllString(string(output), "")
 }
 
@@ -154,7 +155,7 @@ func findMessageFromCommit(hash string) string {
 		panic(err)
 	}
 
-	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`) 
+	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`)
 	return regx.ReplaceAllString(string(output), "")
 }
 
@@ -175,7 +176,7 @@ func findShortMessageFromCommit(hash string) string {
 	if err != nil {
 		panic(err)
 	}
-	
-	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`) 
+
+	regx := regexp.MustCompile(`\r\n|[\r\n\v\f\x{0085}\x{2028}\x{2029}]`)
 	return regx.ReplaceAllString(string(output), "")
 }

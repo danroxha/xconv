@@ -238,41 +238,61 @@ func parseTag(commit string) GitTag {
 	regexGroup := map[string]func(string) string{
 		"author": func(content string) string {
 			regex := regexp.MustCompile(`Author:\s+(.+)`)
+			match := regex.FindStringSubmatch(content)
+			if len(match) == 0 {
+				return ""
+			}
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
 		"hash": func(content string) string {
 			regex := regexp.MustCompile(`commit\s+([a-f0-9]+)`)
+			match := regex.FindStringSubmatch(content)
+			if len(match) == 0 {
+				return ""
+			}
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
 		"tagger": func(content string) string {
 			regex := regexp.MustCompile(`Tagger:\s+(.+)`)
+			match := regex.FindStringSubmatch(content)
+			if len(match) == 0 {
+				return ""
+			}
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
 
 		"datetag": func(content string) string {
 			regex := regexp.MustCompile(`\w+:\s+(\w+\s+)+(\d:?|\s+?)+\s+(.?\d+)`)
 			match := regex.FindAllStringSubmatch(content, -1)
+			if len(match) == 0 {
+				return ""
+			}
 			firstDate := match[0][0]
 			return strings.TrimSpace(strings.Split(firstDate, ": ")[1])
 		},
 		"datecommit": func(content string) string {
 			regex := regexp.MustCompile(`\w+:\s+(\w+\s+)+(\d:?|\s+?)+\s+(.?\d+)`)
 			match := regex.FindAllStringSubmatch(content, -1)
+			if len(match) < 2 {
+				return ""
+			}
 			secondDate := match[1][0]
 			return strings.TrimSpace(strings.Split(secondDate, ": ")[1])
 		},
 		"annonation": func(content string) string {
 			regex := regexp.MustCompile(`tag\s+(.+)`)
+			match := regex.FindStringSubmatch(content)
+			if len(match) == 0 {
+				return ""
+			}
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
 		"stamp": func(content string) string {
 			regex := regexp.MustCompile(`stamp:\s+'(\w+)'`)
 			match := regex.FindStringSubmatch(content)
-
 			if len(match) == 0 {
 				return ""
 			}
-
 			return strings.TrimSpace(regex.FindStringSubmatch(content)[1])
 		},
 	}
